@@ -1,0 +1,45 @@
+{
+  "name": "sokos-oppgjorsrapporter-selvbetjening-frontend",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "mock": "tsx mock/server.ts",
+    "preview": "astro preview",
+    "astro": "astro",
+    "prepare": "husky",
+    "prettier": "prettier --write './src/**/*.{ts,tsx,astro}'"
+  },
+  "dependencies": {
+    "@astrojs/check": "0.9.4",
+    "@astrojs/node": "^9.4.4",
+    "@astrojs/react": "4.3.1",
+    "@navikt/aksel-icons": "7.31.0",
+    "@navikt/ds-react": "7.31.0",
+    "@navikt/nav-dekoratoren-moduler": "3.4.0",
+    "@navikt/oasis": "3.8.0",
+    "astro": "5.13.10",
+    "jose": "6.1.0",
+    "prettier-plugin-astro": "0.14.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "rollup-plugin-import-map": "3.0.0",
+    "swr": "2.3.6"
+  },
+  "devDependencies": {
+    "@hono/node-server": "1.19.4",
+    "@types/node": "24.5.2",
+    "@types/react": "18.x",
+    "@types/react-dom": "18.x",
+    "hono": "4.9.8",
+    "husky": "9.1.7",
+    "prettier": "3.6.2",
+    "tsx": "4.20.5",
+    "typescript": "5.9.2"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

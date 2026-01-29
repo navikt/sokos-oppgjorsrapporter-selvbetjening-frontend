@@ -1,0 +1,44 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: sokos-oppgjorsrapporter-selvbetjening-frontend
+  namespace: okonomi
+  labels:
+    team: okonomi
+spec:
+  idporten:
+    enabled: true
+    sidecar:
+      enabled: true
+      level: Level3
+  tokenx:
+    enabled: true
+  image: {{ image }}
+  port: 3000
+  liveness:
+    path: /oppgjorsrapporter/api/internal/isAlive
+    initialDelay: 10
+  readiness:
+    path: /oppgjorsrapporter/api/internal/isReady
+    initialDelay: 10
+  replicas:
+    min: 2
+    max: 4
+  accessPolicy:
+    outbound:
+      rules:
+        - application: nav-dekoratoren
+          namespace: personbruker
+  ingresses:
+    - "https://www.ekstern.dev.nav.no/oppgjorsrapporter"
+  resources:
+    limits:
+      memory: 768Mi
+    requests:
+      cpu: "20m"
+      memory: 128Mi
+  env:
+    - name: SOKOS_OPPGJORSRAPPORTER_API
+      value: http://sokos-oppgjorsrapporter
+    - name: SOKOS_OPPGJORSRAPPORTER_API_AUDIENCE
+      value: "api://dev-gcp.okonomi.sokos-oppgjorsrapporter/.default"
