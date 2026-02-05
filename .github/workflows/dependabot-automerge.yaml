@@ -1,0 +1,32 @@
+name: Dependabot Auto-merge
+
+on:
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "LICENCE"
+      - ".gitignore"
+      - ".github/CODEOWNERS"
+      - ".github/workflows/build-pr.yaml"
+      - ".github/workflows/dependabot-automerge.yaml"
+      - ".github/workflows/deploy.yaml"
+      - ".github/workflows/manual-deploy-dev.yaml"
+      - ".github/workflows/playwright.yaml"
+      - ".github/workflows/security.yaml"
+      - ".github/dependabot.yaml"
+  workflow_dispatch:
+  schedule:
+    # UTC, så 9:00 vintertid eller 10:00 sommertid i Europe/Oslo
+    - cron: "0 8 * * MON-FRI"
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+  statuses: read
+
+jobs:
+  dependabot-automerge:
+    uses: navikt/pengeflyt-gha-workflows/.github/workflows/dependabot-automerge.yaml@main
+    secrets: inherit

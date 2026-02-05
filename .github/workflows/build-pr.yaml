@@ -1,0 +1,23 @@
+name: Build/test and validate PR
+
+on:
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - "LICENCE"
+      - ".gitignore"
+      - ".github/CODEOWNERS"
+      - ".github/workflows/alerts.yaml"
+      - ".github/workflows/deploy.yaml"
+      - ".github/workflows/manual-deploy-dev.yaml"
+      - ".github/workflows/playwright.yaml"
+      - ".github/workflows/security.yaml"
+      - ".nais/alerterator-dev.yaml"
+
+jobs:
+  build-pr:
+    name: Build and test
+    uses: navikt/pengeflyt-gha-workflows/.github/workflows/node-build-pr-v2.yaml@main
+    with:
+      node-version: '24'
+    secrets: inherit
