@@ -7,12 +7,18 @@ Dette er en AstroJS frontend template med IdPorten autentisering for
 Løsningen bruker et eget API-endepunkt i [sokos-oppgjorsrapporter](https://github.com/navikt/sokos-oppgjorsrapporter).
 
 #  Kjøre appen lokalt
+1. Installere [Node.js](https://nodejs.dev/en/) (f.eks. med `brew install node`)
+2. Installer [pnpm](https://pnpm.io/) (med `brew install pnpm`)
+3. Installer avhengigheter: `pnpm i`
+4. Bygge sokos-oppgjorsrapporter-selvbetjening-frontend: `pnpm run build`
+5. Start hono mockserver: `pnpm run mock`
+6. Med mockserver kjørende i egen terminal, start appen: `pnpm run dev`
+7. Appen nås på http://localhost:4321/oppgjorsrapporter
 
-1. Installer avhengigheter: `npm i`
-2. Bygge sokos-oppgjorsrapporter-selvbetjening-frontend: `npm run build`
-3. Start hono mockserver: `npm run mock`
-4. Med mockserver kjørende i egen terminal, start appen: `npm run dev`
-4. Appen nås på http://localhost:4321/oppgjorsrapporter
+8. Kjør unit-tester: `pnpm test`
+9. Kjør [Playwright](https://playwright.dev/)-tester:
+    - Be Playwright om å hente aktuelle browsere etc.: `pnpm exec playwright install`
+    - Kjør testene: `pnpm playwright test`
 
 # Henvendelser
 
