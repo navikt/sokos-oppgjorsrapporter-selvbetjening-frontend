@@ -10,7 +10,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "prepare": "husky",
-    "prettier": "prettier --write './src/**/*.{ts,tsx,astro}'"
+    "prettier": "prettier --write './src/**/*.{ts,tsx,astro}'",
+    "pwtest": "playwright test",
+    "test": "vitest"
   },
   "dependencies": {
     "@astrojs/check": "0.9.4",
@@ -29,6 +31,8 @@
     "swr": "2.3.6"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.55.0",
     "@hono/node-server": "1.19.4",
     "@types/node": "24.5.2",
     "@types/react": "18.x",
