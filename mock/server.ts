@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import { cors } from "hono/cors";
-import example from "./data/example.json";
+import example from "./data/rapport-meta-data.json";
 
 const api = new Hono();
 

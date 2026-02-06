@@ -1,0 +1,99 @@
+import {
+  BodyLong,
+  Box,
+  Button,
+  ErrorSummary,
+  ExpansionCard,
+  Heading,
+  VStack,
+} from '@navikt/ds-react';
+import type { Language } from '@src/language/language.ts';
+import { text } from '@src/language/text.ts';
+import type { RapportMetadata } from '@src/types/rapport-metadata.ts';
+import { DownloadIcon } from '@navikt/aksel-icons';
+
+interface RapportCardProps {
+  rapportMetaData: RapportMetadata;
+  language: Language;
+}
+
+export default function RapportKort({
+  rapportMetaData,
+  language,
+}: RapportCardProps) {
+  return (
+    <VStack gap="space-32">
+      <VStack>
+        <Heading size="medium">{rapportMetaData.bedriftNavn}</Heading>
+        <BodyLong>
+          {text.orgNrLabel[language]}: {rapportMetaData.orgnr}
+        </BodyLong>
+      </VStack>
+      <ExpansionCard aria-label="Nedlasningsknapper for oppgjørsrapporter">
+        <ExpansionCard.Header>
+          <ExpansionCard.Title>
+            Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt{' '}
+            {rapportMetaData.utbetaltDato}
+          </ExpansionCard.Title>
+        </ExpansionCard.Header>
+        <ExpansionCard.Content>
+          <Innhold id={+rapportMetaData.tilgjengeligeFormater[0].id} />
+        </ExpansionCard.Content>
+      </ExpansionCard>
+    </VStack>
+  );
+}
+
+interface InnholdProps {
+  id: number;
+}
+
+function Innhold({ id }: InnholdProps) {
+  const hentRapport = async (id: number, type: 'pdf' | 'csv') => {
+    const response = await fetch(
+      `/oppgjorsrapporter/api/rapport/hent-rapport-innhold?id=${id}&type=${type}`,
+      {
+        method: 'GET',
+      },
+    );
+    if (!response.ok) {
+      return (
+        <ErrorSummary>Noe gikk galt ved nedlasting av rapporten.</ErrorSummary>
+      );
+    }
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download =
+      type === 'pdf'
+        ? `oppgjorsrapport_arbeidsgiver_${id}.pdf`
+        : `oppgjorsrapport_arbeidsgiver_${id}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  };
+  return (
+    <Box paddingBlock={'2'}>
+      <VStack gap="2" align="center">
+        <Button
+          variant="secondary"
+          size="medium"
+          onClick={() => hentRapport(id, 'pdf')}
+          icon={<DownloadIcon aria-hidden />}
+        >
+          Oppgjørsrapport arbeidsgiver – refusjoner fra Nav - PDF
+        </Button>
+        <Button
+          variant="secondary"
+          size="medium"
+          onClick={() => hentRapport(id, 'csv')}
+          icon={<DownloadIcon aria-hidden />}
+        >
+          Oppgjørsrapport arbeidsgiver – refusjoner fra Nav - CSV
+        </Button>
+      </VStack>
+    </Box>
+  );
+}
