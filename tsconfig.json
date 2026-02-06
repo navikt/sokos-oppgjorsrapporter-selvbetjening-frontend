@@ -6,6 +6,7 @@
     "jsxImportSource": "react",
     "paths": {
       "@src/*": ["./src/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
 }
