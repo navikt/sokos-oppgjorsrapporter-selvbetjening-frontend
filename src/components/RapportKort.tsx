@@ -1,11 +1,54 @@
-import { Box, Button, ErrorSummary, VStack } from '@navikt/ds-react';
+import {
+  BodyLong,
+  Box,
+  Button,
+  ErrorSummary,
+  ExpansionCard,
+  Heading,
+  VStack,
+} from '@navikt/ds-react';
+import type { Language } from '@src/language/language.ts';
+import { text } from '@src/language/text.ts';
+import type { RapportMetadata } from '@src/types/rapport-metadata.ts';
 import { DownloadIcon } from '@navikt/aksel-icons';
 
-interface ContentContainerProps {
+interface RapportCardProps {
+  rapportMetaData: RapportMetadata;
+  language: Language;
+}
+
+export default function RapportKort({
+  rapportMetaData,
+  language,
+}: RapportCardProps) {
+  return (
+    <VStack gap="space-32">
+      <VStack>
+        <Heading size="medium">{rapportMetaData.bedriftNavn}</Heading>
+        <BodyLong>
+          {text.orgNrLabel[language]}: {rapportMetaData.orgnr}
+        </BodyLong>
+      </VStack>
+      <ExpansionCard aria-label="Nedlasningsknapper for oppgjørsrapporter">
+        <ExpansionCard.Header>
+          <ExpansionCard.Title>
+            Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt{' '}
+            {rapportMetaData.utbetaltDato}
+          </ExpansionCard.Title>
+        </ExpansionCard.Header>
+        <ExpansionCard.Content>
+          <Innhold id={+rapportMetaData.tilgjengeligeFormater[0].id} />
+        </ExpansionCard.Content>
+      </ExpansionCard>
+    </VStack>
+  );
+}
+
+interface InnholdProps {
   id: number;
 }
 
-export default function ContentContainer({ id }: ContentContainerProps) {
+function Innhold({ id }: InnholdProps) {
   const hentRapport = async (id: number, type: 'pdf' | 'csv') => {
     const response = await fetch(
       `/oppgjorsrapporter/api/rapport/hent-rapport-innhold?id=${id}&type=${type}`,

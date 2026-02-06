@@ -3,9 +3,10 @@ import { text } from '../language/text';
 import Layout from '../layouts/Layout.astro';
 import { Heading, VStack } from '@navikt/ds-react';
 import type { Language } from '../language/language';
-import AstroIslandExample from '@src/components/astro-island/AstroIsland.astro';
+import Oppgjorsrapporter from '@src/components/astro-island/Oppgjorsrapporter.astro';
 
 const language = Astro.currentLocale as Language;
+const id = Astro.url.searchParams.get('id');
 console.error('Neverlucky i index');
 ---
 
@@ -16,6 +17,6 @@ console.error('Neverlucky i index');
         {text.title[language]}
       </Heading>
     </div>
-  <AstroIslandExample server:defer />
+    <Oppgjorsrapporter server:defer {id} />
   </VStack>
 </Layout>
