@@ -9,11 +9,12 @@ import {
 } from '@navikt/ds-react';
 import type { Language } from '@src/language/language.ts';
 import { text } from '@src/language/text.ts';
-import type { RapportMetadata } from '@src/types/rapport-metadata.ts';
+import type { RapportDTO } from '@src/schemas/types.ts';
 import { DownloadIcon } from '@navikt/aksel-icons';
+import { isoDatoTilNorskDato } from '@utils/dato-utils.ts';
 
 interface RapportCardProps {
-  rapportMetaData: RapportMetadata;
+  rapportMetaData: RapportDTO;
   language: Language;
 }
 
@@ -24,7 +25,7 @@ export default function RapportKort({
   return (
     <VStack gap="space-32">
       <VStack>
-        <Heading size="medium">{rapportMetaData.bedriftNavn}</Heading>
+        <Heading size="medium">{rapportMetaData.orgNavn}</Heading>
         <BodyLong>
           {text.orgNrLabel[language]}: {rapportMetaData.orgnr}
         </BodyLong>
@@ -33,11 +34,11 @@ export default function RapportKort({
         <ExpansionCard.Header>
           <ExpansionCard.Title>
             Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt{' '}
-            {rapportMetaData.utbetaltDato}
+            {isoDatoTilNorskDato(rapportMetaData.datoValutert)}
           </ExpansionCard.Title>
         </ExpansionCard.Header>
         <ExpansionCard.Content>
-          <Innhold id={+rapportMetaData.tilgjengeligeFormater[0].id} />
+          <Innhold id={rapportMetaData.id} />
         </ExpansionCard.Content>
       </ExpansionCard>
     </VStack>

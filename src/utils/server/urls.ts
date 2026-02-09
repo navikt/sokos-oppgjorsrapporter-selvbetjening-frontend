@@ -16,9 +16,9 @@ export const getEnvironment = () => {
 type EnvUrl = { development: string; production: string; local: string };
 
 const OPPGJORSRAPPORTER_API_URL = {
-  local: 'http://localhost:3000/api/oppgjorsrapporter',
-  development: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/oppgjorsrapporter`,
-  production: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/oppgjorsrapporter`,
+  local: 'http://localhost:3000/api/rapport/v1',
+  development: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/rapport/v1/`,
+  production: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/rapport/v1/`,
 };
 
 const BASE_URL: EnvUrl = {

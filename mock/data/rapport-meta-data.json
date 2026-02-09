@@ -1,18 +1,10 @@
 {
-  "bedriftNavn": "Dalen og Heia økonomi",
-  "orgnr": "123 456 789",
-  "rapportTypeTeks": "Oppgjørsrapport arbeidsgiver – refusjoner fra Nav.",
-  "utbetaltDato": "31.06.2025",
-  "tilgjengeligeFormater": [
-    {
-      "format": "PDF",
-      "filNavn": "Oppgjørsrapport arbeidsgiver -refusjoner fra Nav-310625.pdf",
-      "id": "1"
-    },
-    {
-      "format": "CSV",
-      "filNavn": "Oppgjørsrapport arbeidsgiver -refusjoner fra Nav-310625.csv",
-      "id": "1"
-    }
-  ]
+  "id": 1,
+  "orgnr": "123456789",
+  "orgNavn": "Test Bedrift AS",
+  "type": "ref-arbg",
+  "datoValutert": "2023-01-15",
+  "bankkonto": "12345678901",
+  "opprettet": "2023-01-15T19:35:18.580041Z",
+  "arkivert": false
 }
