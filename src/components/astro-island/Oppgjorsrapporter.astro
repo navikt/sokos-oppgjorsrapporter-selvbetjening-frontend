@@ -4,23 +4,43 @@ import type { Language } from '@src/language/language';
 import type { RapportMetadata } from '@src/types/rapport-metadata';
 import RapportKort from '../RapportKort.tsx';
 import { ErrorSummary } from '@navikt/ds-react/ErrorSummary';
+import logger from '@utils/logger.ts';
 
 const { id } = Astro.props;
 
-let rapportMetaData: RapportMetadata | null;
+let rapportMetaData: RapportMetadata | null = null;
 let error: string | null = null;
 
-if (!id) error = 'Mangler rapport id i URL';
+if (!id) {
+  error = 'Mangler rapport id i URL';
+} else {
+  const url = `${oppgjorsrapporterApiUrl}?id=${encodeURIComponent(id)}`;
 
-const url = `${oppgjorsrapporterApiUrl}?id=${encodeURIComponent(id)}`;
+  try {
+    const response = await fetch(url);
 
-const response = await fetch(url);
-
-if (!response.ok) {
-  error = `Failed to fetch rapport metadata for id=${id}`;
+    if (!response.ok) {
+      error = `Klarte ikke å hente rapportmetadata for id=${id}`;
+      logger.error({
+        msg: 'Failed to fetch rapport metadata',
+        id,
+        status: response.status,
+        statusText: response.statusText,
+        url,
+      });
+    } else {
+      rapportMetaData = await response.json();
+    }
+  } catch (e) {
+    error = 'Det oppstod en teknisk feil ved henting av rapportmetadata.';
+    logger.error({
+      msg: 'Exception when fetching rapport metadata',
+      id,
+      url,
+      error: e instanceof Error ? { message: e.message, stack: e.stack } : e,
+    });
+  }
 }
-
-rapportMetaData = await response.json();
 
 const language = Astro.currentLocale as Language;
 ---
