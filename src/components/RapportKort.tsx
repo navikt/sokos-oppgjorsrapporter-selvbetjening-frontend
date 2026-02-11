@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   BodyLong,
   Box,
@@ -50,47 +51,61 @@ interface InnholdProps {
 }
 
 function Innhold({ id }: InnholdProps) {
-  const hentRapport = async (id: number, type: 'pdf' | 'csv') => {
-    const response = await fetch(
-      `/oppgjorsrapporter/api/rapport/hent-rapport-innhold?id=${id}&type=${type}`,
-      {
-        method: 'GET',
-      },
-    );
-    if (!response.ok) {
-      return (
-        <ErrorSummary>Noe gikk galt ved nedlasting av rapporten.</ErrorSummary>
-      );
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<'pdf' | 'csv' | null>(null);
+
+  const hentRapport = async (type: 'pdf' | 'csv') => {
+    setError(null);
+    setIsLoading(type);
+
+    try {
+      const url = `/oppgjorsrapporter/api/rapport/hent-rapport-innhold?id=${id}&type=${type}`;
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        setError(
+          `Noe gikk galt ved nedlasting av ${type.toUpperCase()}-rapporten.`,
+        );
+        return;
+      }
+
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = `oppgjorsrapport_arbeidsgiver_${id}.${type}`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (e) {
+      setError('Det oppstod en teknisk feil ved nedlasting.');
+    } finally {
+      setIsLoading(null);
     }
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download =
-      type === 'pdf'
-        ? `oppgjorsrapport_arbeidsgiver_${id}.pdf`
-        : `oppgjorsrapport_arbeidsgiver_${id}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    window.URL.revokeObjectURL(url);
   };
+
   return (
     <Box paddingBlock={'2'}>
       <VStack gap="2" align="center">
+        {error && (
+          <ErrorSummary heading="Feil ved nedlasting">{error}</ErrorSummary>
+        )}
         <Button
           variant="secondary"
           size="medium"
-          onClick={() => hentRapport(id, 'pdf')}
+          onClick={() => hentRapport('pdf')}
           icon={<DownloadIcon aria-hidden />}
+          loading={isLoading === 'pdf'}
         >
           Oppgjørsrapport arbeidsgiver – refusjoner fra Nav - PDF
         </Button>
         <Button
           variant="secondary"
           size="medium"
-          onClick={() => hentRapport(id, 'csv')}
+          onClick={() => hentRapport('csv')}
           icon={<DownloadIcon aria-hidden />}
+          loading={isLoading === 'csv'}
         >
           Oppgjørsrapport arbeidsgiver – refusjoner fra Nav - CSV
         </Button>

@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { oppgjorsrapporterApiUrl } from '@src/utils/server/urls';
+import { oppgjorsrapporterApiUrl } from '@utils/server/urls.ts';
 import logger from '@utils/logger.ts';
 import { exchangeCitizenToken } from '@utils/server/token.ts';
 
@@ -19,59 +19,63 @@ export const GET: APIRoute = async ({ url, locals }) => {
   if (!id || !type) {
     return new Response(
       JSON.stringify({ error: 'Mangler rapport id eller type' }),
-      {
-        status: 400,
-      },
+      { status: 400 },
     );
   }
 
+  if (type !== 'pdf' && type !== 'csv') {
+    return new Response(JSON.stringify({ error: 'Ugyldig type' }), {
+      status: 400,
+    });
+  }
+
+  const backendUrl = `${oppgjorsrapporterApiUrl}/${id}/innhold`;
+  const accept = type === 'pdf' ? 'application/pdf' : 'text/csv';
+
   try {
-    let content: Blob;
-    if (type === 'pdf') {
-      content = await hentRapportPdf(Number(id), tokenXToken);
-    } else if (type === 'csv') {
-      content = await hentRapportCsv(Number(id), tokenXToken);
-    } else {
-      return new Response(JSON.stringify({ error: 'Invalid type' }), {
-        status: 400,
+    const response = await fetch(backendUrl, {
+      method: 'GET',
+      headers: {
+        Accept: accept,
+        Authorization: `Bearer ${tokenXToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      logger.error({
+        msg: 'Failed to fetch rapport innhold',
+        id,
+        type,
+        status: response.status,
+        statusText: response.statusText,
+        url: backendUrl,
       });
+
+      return new Response(
+        JSON.stringify({ error: 'Feil ved henting av rapport' }),
+        {
+          status: response.status,
+        },
+      );
     }
 
-    const headers = new Headers();
-    if (type === 'pdf') {
-      headers.set('Content-Type', 'application/pdf');
-    } else if (type === 'csv') {
-      headers.set('Content-Type', 'text/csv');
-    }
-    return new Response(content, { headers });
+    const blob = await response.blob();
+    return new Response(blob, {
+      headers: { 'Content-Type': accept },
+    });
   } catch (error) {
-    logger.error('Failed to fetch rapport innhold');
-    return new Response(JSON.stringify({ error: 'Failed to fetch' }), {
+    logger.error({
+      msg: 'Feil ved henting av rapport innhold',
+      id,
+      type,
+      error:
+        error instanceof Error
+          ? { message: error.message, stack: error.stack }
+          : error,
+    });
+
+    return new Response(JSON.stringify({ error: 'Teknisk feil' }), {
       status: 500,
     });
   }
 };
-
-async function hentRapportPdf(id: number, token: string): Promise<Blob> {
-  const response = await fetch(`${oppgjorsrapporterApiUrl}/${id}/innhold`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/pdf',
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) throw new Error('Failed to fetch PDF');
-  return await response.blob();
-}
-
-async function hentRapportCsv(id: number, token: string): Promise<Blob> {
-  const response = await fetch(`${oppgjorsrapporterApiUrl}/${id}/innhold`, {
-    method: 'GET',
-    headers: {
-      Accept: 'text/csv',
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) throw new Error('Failed to fetch CSV');
-  return await response.blob();
-}
