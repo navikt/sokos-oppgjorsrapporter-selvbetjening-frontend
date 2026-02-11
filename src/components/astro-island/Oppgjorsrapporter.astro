@@ -1,10 +1,10 @@
 ---
-import { oppgjorsrapporterApiUrl } from '@src/utils/server/urls';
 import type { Language } from '@src/language/language';
 import type { RapportDTO } from '@src/schemas/types.ts';
 import RapportKort from '../RapportKort.tsx';
 import { ErrorSummary } from '@navikt/ds-react/ErrorSummary';
 import logger from '@utils/logger.ts';
+import { oppgjorsrapporterApiUrl } from '@utils/server/urls.ts';
 
 const { id } = Astro.props;
 
@@ -14,9 +14,8 @@ let error: string | null = null;
 if (!id) {
   error = 'Mangler rapport id i URL';
 } else {
-  const url = `${oppgjorsrapporterApiUrl}/${encodeURIComponent(id)}`;
-
   try {
+    let url = `${oppgjorsrapporterApiUrl}/${id}`;
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -36,7 +35,6 @@ if (!id) {
     logger.error({
       msg: 'Exception when fetching rapport metadata',
       id,
-      url,
       error: e instanceof Error ? { message: e.message, stack: e.stack } : e,
     });
   }

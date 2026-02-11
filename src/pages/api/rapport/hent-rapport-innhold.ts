@@ -1,20 +1,20 @@
 import type { APIRoute } from 'astro';
 import { oppgjorsrapporterApiUrl } from '@src/utils/server/urls';
 import logger from '@utils/logger.ts';
-import { getOboToken } from '@utils/server/token.ts';
+import { exchangeCitizenToken } from '@utils/server/token.ts';
 
 export const GET: APIRoute = async ({ url, locals }) => {
   const id = url.searchParams.get('id');
   const type = url.searchParams.get('type');
 
-  const token = locals.token;
-  if (!token) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+  const citizenToken = locals.token;
+  if (!citizenToken) {
+    return new Response(JSON.stringify({ error: 'Mangler borger token' }), {
       status: 401,
     });
   }
 
-  const oboToken = await getOboToken(token);
+  const tokenXToken = await exchangeCitizenToken(citizenToken);
 
   if (!id || !type) {
     return new Response(
@@ -28,9 +28,9 @@ export const GET: APIRoute = async ({ url, locals }) => {
   try {
     let content: Blob;
     if (type === 'pdf') {
-      content = await hentRapportPdf(Number(id), oboToken);
+      content = await hentRapportPdf(Number(id), tokenXToken);
     } else if (type === 'csv') {
-      content = await hentRapportCsv(Number(id), oboToken);
+      content = await hentRapportCsv(Number(id), tokenXToken);
     } else {
       return new Response(JSON.stringify({ error: 'Invalid type' }), {
         status: 400,

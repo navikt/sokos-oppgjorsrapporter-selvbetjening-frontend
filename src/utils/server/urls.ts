@@ -21,8 +21,8 @@ const OPPGJORSRAPPORTER_API_URL = {
   production: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/rapport/v1/`,
 };
 
-const BASE_URL: EnvUrl = {
-  local: 'http://localhost:4321/oppgjorsrapporter',
+export const BASE_URL: EnvUrl = {
+  local: 'http://localhost:4321/oppgjorsrapporter/',
   development: 'https://www.ansatt.dev.nav.no/oppgjorsrapporter/',
   production: 'https://www.nav.no/oppgjorsrapporter/',
 };
