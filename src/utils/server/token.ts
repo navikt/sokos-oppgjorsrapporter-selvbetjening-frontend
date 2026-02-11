@@ -1,4 +1,4 @@
-import { requestTokenxOboToken } from '@navikt/oasis';
+import { requestOboToken } from '@navikt/oasis';
 import { isLocal } from '@src/utils/server/environment.ts';
 import { generateKeyPair, SignJWT } from 'jose';
 
@@ -6,18 +6,20 @@ const targetApp = 'sokos-oppgjorsrapporter';
 const audience = `${process.env.NAIS_CLUSTER_NAME}:okonomi:${targetApp}`;
 
 export const exchangeCitizenToken = async (token: string): Promise<string> => {
-  const tokenXOboToken = await requestTokenxOboToken(token, audience);
+  const oboResult = await requestOboToken(token, audience);
 
   if (isLocal) {
-    return 'Uekte token for lokal utvikling';
+    return 'Uekte obo token for lokal utvikling';
   }
 
-  if (!tokenXOboToken.ok) {
-    console.error('Error getting access token: ' + tokenXOboToken.error);
-    throw new Error('Request oboToken for example-api failed ');
+  if (!oboResult.ok) {
+    console.error('Feil ved henting av token: ' + oboResult.error);
+    throw new Error(
+      `Henting av oboToken for ${targetApp} feilet: ${oboResult.error.message}`,
+    );
   }
 
-  return tokenXOboToken.token;
+  return oboResult.token;
 };
 
 const alg = 'RS256';
