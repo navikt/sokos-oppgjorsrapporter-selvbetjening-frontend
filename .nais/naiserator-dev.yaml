@@ -2,9 +2,9 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: sokos-oppgjorsrapporter-selvbetjening-frontend
-  namespace: okonomi
+  namespace: oppgjorsrapporter
   labels:
-    team: okonomi
+    team: oppgjorsrapporter
 spec:
   idporten:
     enabled: true
@@ -41,4 +41,4 @@ spec:
     - name: SOKOS_OPPGJORSRAPPORTER_API
       value: http://sokos-oppgjorsrapporter
     - name: SOKOS_OPPGJORSRAPPORTER_API_AUDIENCE
-      value: "api://dev-gcp.okonomi.sokos-oppgjorsrapporter/.default"
+      value: "api://dev-gcp.oppgjorsrapporter.sokos-oppgjorsrapporter/.default"
