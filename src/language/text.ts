@@ -1,12 +1,12 @@
 export const text = {
   title: {
-    nb: 'Norsk bokmål oppgjorsrapporter',
+    nb: 'Oppgjørsrapporter',
     en: 'English oppgjorsrapporter',
-    nn: 'Norsk nynorsk oppgjorsrapporter',
+    nn: 'NN Oppgjørsrapporter',
   },
-  name: {
-    nb: 'Navn',
-    en: 'Name',
-    nn: 'Navn',
+  orgNrLabel: {
+    nb: 'Org.nummer',
+    en: 'Eng Org.nummer',
+    nn: 'NN Org.nummer',
   },
 };

@@ -16,13 +16,13 @@ export const getEnvironment = () => {
 type EnvUrl = { development: string; production: string; local: string };
 
 const OPPGJORSRAPPORTER_API_URL = {
-  local: 'http://localhost:3000/api/oppgjorsrapporter',
-  development: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/oppgjorsrapporter`,
-  production: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/oppgjorsrapporter`,
+  local: 'http://localhost:3000/api/rapport/v1',
+  development: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/rapport/v1/`,
+  production: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/rapport/v1/`,
 };
 
-const BASE_URL: EnvUrl = {
-  local: 'http://localhost:4321/oppgjorsrapporter',
+export const BASE_URL: EnvUrl = {
+  local: 'http://localhost:4321/oppgjorsrapporter/',
   development: 'https://www.ansatt.dev.nav.no/oppgjorsrapporter/',
   production: 'https://www.nav.no/oppgjorsrapporter/',
 };

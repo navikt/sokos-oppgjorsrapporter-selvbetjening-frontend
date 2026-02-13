@@ -1,21 +1,21 @@
 ---
 import { text } from '../language/text';
 import Layout from '../layouts/Layout.astro';
-import { Heading } from '@navikt/ds-react';
+import { Heading, VStack } from '@navikt/ds-react';
 import type { Language } from '../language/language';
-import AstroIslandExample from '@src/components/astro-island/AstroIsland.astro';
+import Oppgjorsrapporter from '@src/components/astro-island/Oppgjorsrapporter.astro';
 
 const language = Astro.currentLocale as Language;
-console.error('Neverlucky i index');
+const id = Astro.url.searchParams.get('id');
 ---
 
 <Layout>
-  <div>
+  <VStack gap="space-32">
     <div>
       <Heading size={'large'}>
         {text.title[language]}
       </Heading>
     </div>
-  </div>
-  <AstroIslandExample server:defer />
+    <Oppgjorsrapporter server:defer {id} />
+  </VStack>
 </Layout>

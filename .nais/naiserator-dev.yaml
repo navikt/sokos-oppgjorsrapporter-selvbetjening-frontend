@@ -39,6 +39,6 @@ spec:
       memory: 128Mi
   env:
     - name: SOKOS_OPPGJORSRAPPORTER_API
-      value: http://sokos-oppgjorsrapporter
+      value: http://sokos-oppgjorsrapporter.okonomi
     - name: SOKOS_OPPGJORSRAPPORTER_API_AUDIENCE
       value: "api://dev-gcp.oppgjorsrapporter.sokos-oppgjorsrapporter/.default"
