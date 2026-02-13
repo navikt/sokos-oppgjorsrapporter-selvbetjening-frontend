@@ -12,7 +12,7 @@ permissions:
 jobs:
   build:
     name: Build/test & push image
-    uses: navikt/pengeflyt-gha-workflows/.github/workflows/node-build-push-image-v2.yaml@chore/tob-6243-team-parameter
+    uses: navikt/pengeflyt-gha-workflows/.github/workflows/node-build-push-image-v2.yaml@main
     secrets: inherit
     with:
       team: oppgjorsrapporter
