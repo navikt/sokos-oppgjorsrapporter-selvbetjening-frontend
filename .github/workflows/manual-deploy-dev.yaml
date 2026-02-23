@@ -15,6 +15,7 @@ jobs:
     uses: navikt/pengeflyt-gha-workflows/.github/workflows/node-build-push-image-v2.yaml@main
     secrets: inherit
     with:
+      team: oppgjorsrapporter
       node-version: '24'
       image-tag: snapshot
 
