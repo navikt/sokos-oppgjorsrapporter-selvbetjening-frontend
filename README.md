@@ -1,10 +1,10 @@
 # sokos-oppgjorsrapporter-selvbetjening-frontend
 
-Dette er en AstroJS frontend template med IdPorten autentisering for
+Dette er en AstroJS frontend med IdPorten autentisering for
 - arbeidsgivere som skal hente oppgjørsrapporter
 - samhandlere og kreditorrer som skal hente trekkoppgjørsrapporter
 
-Løsningen bruker et eget API-endepunkt i [sokos-oppgjorsrapporter](https://github.com/navikt/sokos-oppgjorsrapporter).
+Løsningen bruker API-endepunkter i [sokos-oppgjorsrapporter](https://github.com/navikt/sokos-oppgjorsrapporter) for å hente rapport metadata og rapport innhold.
 
 #  Kjøre appen lokalt
 1. Installere [Node.js](https://nodejs.dev/en/) (f.eks. med `brew install node`)
@@ -13,7 +13,7 @@ Løsningen bruker et eget API-endepunkt i [sokos-oppgjorsrapporter](https://gith
 4. Bygge sokos-oppgjorsrapporter-selvbetjening-frontend: `pnpm run build`
 5. Start hono mockserver: `pnpm run mock`
 6. Med mockserver kjørende i egen terminal, start appen: `pnpm run dev`
-7. Appen nås på http://localhost:4321/oppgjorsrapporter
+7. Appen nås på http://localhost:4321/oppgjorsrapporter?id=1
 
 8. Kjør unit-tester: `pnpm test`
 9. Kjør [Playwright](https://playwright.dev/)-tester:
