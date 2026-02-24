@@ -7,8 +7,9 @@ import { localToken } from '@src/utils/server/token';
 import logger from '@utils/logger.ts';
 
 export const onRequest = defineMiddleware(async (context, next) => {
-  const token = getToken(context.request.headers);
-  const params = encodeURIComponent(context.url.search);
+  const redirectPath = encodeURIComponent(
+    context.url.pathname + context.url.search,
+  );
 
   if (isLocal) {
     context.locals.token = await localToken({ pid: '12345678912' });
@@ -19,11 +20,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
 
+  const token = getToken(context.request.headers);
   if (!token) {
     logger.info(
       'Kunne ikke finne noen bearer token i requesten. Ruter til innlogging',
     );
-    return context.redirect(`${loginUrl}${params}`);
+    return context.redirect(`${loginUrl}${redirectPath}`);
   }
 
   const validation = await validateToken(token);
@@ -32,7 +34,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     logger.error(
       `Fant ugylidg JWT token (cause: ${validation.errorType} ${validation.error}, ruter til innlogging.`,
     );
-    return context.redirect(`${loginUrl}${params}`);
+    return context.redirect(`${loginUrl}${redirectPath}`);
   }
 
   context.locals.token = token;
