@@ -7,14 +7,14 @@ const targetApp = 'sokos-oppgjorsrapporter';
 const audience = `${process.env.SOKOS_OPPGJORSRAPPORTER_TOKEN_AUDIENCE}`;
 
 export const exchangeCitizenToken = async (token: string): Promise<string> => {
+  if (isLocal) {
+    return 'Uekte obo token for lokal utvikling';
+  }
+
   logger.info(
     `Forsøker å hente tokenX obo token for ${targetApp} med audience ${audience}`,
   );
   const tokenxOboTokenResult = await requestTokenxOboToken(token, audience);
-
-  if (isLocal) {
-    return 'Uekte obo token for lokal utvikling';
-  }
 
   if (!tokenxOboTokenResult.ok) {
     logger.error('Feil ved henting av token: ' + tokenxOboTokenResult.error);

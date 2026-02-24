@@ -38,9 +38,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const validation = await validateToken(token);
 
   if (!validation.ok) {
-    logger.error(
-      `Fant ugylidg JWT token (cause: ${validation.errorType} ${validation.error}, ruter til innlogging.`,
-    );
     return context.redirect(`${loginUrl}${redirectPath}`);
   }
 

@@ -1,17 +1,10 @@
 import { useState } from 'react';
-import {
-  BodyLong,
-  Box,
-  Button,
-  ErrorSummary,
-  ExpansionCard,
-  Heading,
-  VStack,
-} from '@navikt/ds-react';
+import { BodyLong, Box, Button, ErrorSummary, ExpansionCard, Heading, VStack } from '@navikt/ds-react';
 import { text } from '@src/language/text.ts';
 import type { RapportMetadata } from '@src/schemas/types.ts';
 import { DownloadIcon } from '@navikt/aksel-icons';
 import { isoDatoTilNorskDato } from '@utils/dato-utils.ts';
+import logger from '@utils/logger.ts';
 
 interface RapportCardProps {
   rapportMetaData: RapportMetadata;
@@ -32,7 +25,7 @@ export default function RapportKort({ rapportMetaData }: RapportCardProps) {
       >
         <ExpansionCard.Header>
           <ExpansionCard.Title>
-            Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt{' '}
+            Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt
             {isoDatoTilNorskDato(rapportMetaData.datoValutert)}
           </ExpansionCard.Title>
         </ExpansionCard.Header>
@@ -63,6 +56,9 @@ function Innhold({ id }: InnholdProps) {
       if (!response.ok) {
         setError(
           `Noe gikk galt ved nedlasting av ${type.toUpperCase()}-rapporten.`,
+        );
+        logger.error(
+          `Http feil med status ${response.status} ved nedlasting av rapport innhold for id=${id} og type=${type}`,
         );
         return;
       }

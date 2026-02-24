@@ -2,11 +2,21 @@ import * as z from 'zod/v4';
 
 z.config(z.locales.no());
 
+export const REPORT_TYPE_REF_ARBG = 'ref-arbg';
+export const REPORT_TYPE_TREKK_KRED = 'trekk-kred';
+export const REPORT_TYPE_TREKK_HEND = 'trekk-hend';
+
+export const RapportType = z.enum([
+  REPORT_TYPE_REF_ARBG,
+  REPORT_TYPE_TREKK_KRED,
+  REPORT_TYPE_TREKK_HEND,
+]);
+
 export const RapportMetadata = z.object({
   id: z.number(),
   orgnr: z.string(),
   orgNavn: z.string().optional(),
-  type: z.string(),
+  type: RapportType,
   datoValutert: z.string(),
   bankkonto: z.string().optional(),
   opprettet: z.string(),
