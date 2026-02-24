@@ -7,7 +7,7 @@ describe('hentRapportMetadataForPage', () => {
 
     const result = await hentRapportMetadataForPage(undefined, mockCallAction);
 
-    expect(result.error).toBe('Mangler rapport rapportId i URL');
+    expect(result.error).toBe('Mangler gyldig rapport id i URL');
     expect(mockCallAction).not.toHaveBeenCalled();
   });
 
@@ -16,7 +16,7 @@ describe('hentRapportMetadataForPage', () => {
       error: { message: 'Noe gikk galt' },
     });
 
-    const result = await hentRapportMetadataForPage('123', mockCallAction);
+    const result = await hentRapportMetadataForPage(123, mockCallAction);
 
     expect(result.error).toBe('Noe gikk galt');
     expect(result.data).toBeNull();
@@ -26,7 +26,7 @@ describe('hentRapportMetadataForPage', () => {
     const mockData = { id: '123', title: 'Test Rapport' };
     const mockCallAction = vi.fn().mockResolvedValue({ data: mockData });
 
-    const result = await hentRapportMetadataForPage('123', mockCallAction);
+    const result = await hentRapportMetadataForPage(123, mockCallAction);
 
     expect(result.data).toEqual(mockData);
     expect(result.error).toBeNull();

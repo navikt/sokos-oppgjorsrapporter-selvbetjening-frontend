@@ -8,7 +8,7 @@ import { exchangeCitizenToken } from '@utils/server/token.ts';
 export const server = {
   hentRapportMetadata: defineAction({
     input: z.object({
-      id: z.union([z.string(), z.number()]),
+      id: z.number(),
     }),
     handler: async ({ id }, context) => {
       const citizenToken = context.locals.token;

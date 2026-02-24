@@ -5,13 +5,13 @@ type HentRapportMetadataResult =
   | { data: null; error: string };
 
 export async function hentRapportMetadataForPage(
-  rapportId: string | undefined,
+  rapportId: number | undefined,
   callAction: (params: {
-    id: string;
+    id: number;
   }) => Promise<{ data?: RapportMetadata; error?: { message: string } }>,
 ): Promise<HentRapportMetadataResult> {
   if (!rapportId) {
-    return { data: null, error: 'Mangler rapport rapportId i URL' };
+    return { data: null, error: 'Mangler gyldig rapport id i URL' };
   }
 
   const result = await callAction({ id: rapportId });

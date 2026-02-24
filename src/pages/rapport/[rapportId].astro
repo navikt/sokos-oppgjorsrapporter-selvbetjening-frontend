@@ -10,7 +10,7 @@ import { hentRapportMetadataForPage } from '@src/pages/rapport/hentRapportMetada
 const { rapportId } = Astro.params;
 
 const { data: rapportMetaData, error } = await hentRapportMetadataForPage(
-  rapportId,
+  Number(rapportId),
   (params) => Astro.callAction(actions.hentRapportMetadata, params),
 );
 ---

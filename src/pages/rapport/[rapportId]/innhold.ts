@@ -4,7 +4,7 @@ import logger from '@utils/logger.ts';
 import { exchangeCitizenToken } from '@utils/server/token.ts';
 
 export const GET: APIRoute = async ({ url, params, locals }) => {
-  const id = params.rapportId;
+  const id = Number(params.rapportId);
   const type = url.searchParams.get('type');
 
   const citizenToken = locals.token;
