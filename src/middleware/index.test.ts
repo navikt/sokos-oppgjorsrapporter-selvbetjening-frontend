@@ -25,7 +25,7 @@ vi.mock('@utils/logger.ts', () => ({
 }));
 
 vi.mock('./urls', () => ({
-  loginUrl: 'https://login.example.com/login?redirect=',
+  loginUrl: '/oppgjorsrapporter/oauth2/login?redirect=',
 }));
 
 vi.mock('./utils', () => ({
@@ -61,7 +61,7 @@ describe('middleware', () => {
     await onRequest(context, mockNext);
 
     expect(mockRedirect).toHaveBeenCalledWith(
-      'https://login.example.com/login?redirect=%2Frapport%2F57309',
+      '/oppgjorsrapporter/oauth2/login?redirect=%2Frapport%2F57309',
     );
   });
 
@@ -72,7 +72,7 @@ describe('middleware', () => {
     await onRequest(context, mockNext);
 
     expect(mockRedirect).toHaveBeenCalledWith(
-      'https://login.example.com/login?redirect=%2Frapport%2F57309%3Ffoo%3Dbar',
+      '/oppgjorsrapporter/oauth2/login?redirect=%2Frapport%2F57309%3Ffoo%3Dbar',
     );
   });
 
@@ -88,7 +88,7 @@ describe('middleware', () => {
     await onRequest(context, mockNext);
 
     expect(mockRedirect).toHaveBeenCalledWith(
-      expect.stringContaining('%2Foppgjorsrapporter%2Frapport%2F57309'),
+      '/oppgjorsrapporter/oauth2/login?redirect=%2Frapport%2F57309',
     );
   });
 
@@ -111,5 +111,18 @@ describe('middleware', () => {
 
     expect(mockNext).toHaveBeenCalled();
     expect(getToken).not.toHaveBeenCalled();
+  });
+
+  it('skal ikke duplisere base-sti i redirect URL', async () => {
+    vi.mocked(getToken).mockReturnValue(null);
+    vi.mocked(isInternal).mockReturnValue(false);
+
+    const context = createMockContext('/oppgjorsrapporter/rapport/57309');
+    await onRequest(context, mockNext);
+
+    const redirectCall = mockRedirect.mock.calls[0][0] as string;
+    const decodedRedirect = decodeURIComponent(redirectCall);
+
+    expect(decodedRedirect).not.toMatch(/oppgjorsrapporter.*oppgjorsrapporter/);
   });
 });

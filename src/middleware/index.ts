@@ -6,10 +6,17 @@ import { getToken, validateToken } from '@navikt/oasis';
 import { localToken } from '@src/utils/server/token';
 import logger from '@utils/logger.ts';
 
+const basePath = '/oppgjorsrapporter';
+
 export const onRequest = defineMiddleware(async (context, next) => {
-  const redirectPath = encodeURIComponent(
-    context.url.pathname + context.url.search,
-  );
+  let path = context.url.pathname + context.url.search;
+
+  // Fjerner base path for å unngå duplikat i redirect URL
+  if (path.startsWith(basePath)) {
+    path = path.slice(basePath.length) || '/';
+  }
+
+  const redirectPath = encodeURIComponent(path);
 
   if (isLocal) {
     context.locals.token = await localToken({ pid: '12345678912' });
