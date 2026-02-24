@@ -1,6 +1,6 @@
 import { ActionError, defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
-import { RapportDTO } from '@src/schemas/types.ts';
+import { RapportMetadata } from '@src/schemas/types.ts';
 import { oppgjorsrapporterApiUrl } from '@utils/server/urls.ts';
 import logger from '@utils/logger.ts';
 import { exchangeCitizenToken } from '@utils/server/token.ts';
@@ -22,7 +22,7 @@ export const server = {
 
       try {
         const data = await fetchRapportMetadata(id, citizenToken);
-        return RapportDTO.parse(data);
+        return RapportMetadata.parse(data);
       } catch (error: any) {
         throw new ActionError({
           code: 'INTERNAL_SERVER_ERROR',
@@ -36,7 +36,7 @@ export const server = {
 const fetchRapportMetadata = async (
   id: string | number,
   citizenToken: string,
-): Promise<RapportDTO> => {
+): Promise<RapportMetadata> => {
   const tokenXToken = await exchangeCitizenToken(citizenToken);
   const url = `${oppgjorsrapporterApiUrl}/${id}`;
 

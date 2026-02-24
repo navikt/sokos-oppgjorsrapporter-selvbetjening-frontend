@@ -9,12 +9,12 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { text } from '@src/language/text.ts';
-import type { RapportDTO } from '@src/schemas/types.ts';
+import type { RapportMetadata } from '@src/schemas/types.ts';
 import { DownloadIcon } from '@navikt/aksel-icons';
 import { isoDatoTilNorskDato } from '@utils/dato-utils.ts';
 
 interface RapportCardProps {
-  rapportMetaData: RapportDTO;
+  rapportMetaData: RapportMetadata;
 }
 
 export default function RapportKort({ rapportMetaData }: RapportCardProps) {
@@ -26,7 +26,10 @@ export default function RapportKort({ rapportMetaData }: RapportCardProps) {
           {text.orgNrLabel}: {rapportMetaData.orgnr}
         </BodyLong>
       </VStack>
-      <ExpansionCard aria-label="Nedlasningsknapper for oppgjørsrapporter">
+      <ExpansionCard
+        aria-label="Nedlasningsknapper for oppgjørsrapporter"
+        defaultOpen={true}
+      >
         <ExpansionCard.Header>
           <ExpansionCard.Title>
             Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt{' '}
@@ -54,7 +57,7 @@ function Innhold({ id }: InnholdProps) {
     setIsLoading(type);
 
     try {
-      const url = `/oppgjorsrapporter/api/rapport/hent-rapport-innhold?id=${id}&type=${type}`;
+      const url = `/oppgjorsrapporter/rapport/${id}/innhold?type=${type}`;
       const response = await fetch(url);
 
       if (!response.ok) {
