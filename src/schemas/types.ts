@@ -12,8 +12,11 @@ export const RapportType = z.enum([
   REPORT_TYPE_TREKK_HEND,
 ]);
 
+export const RapportId = z.int().positive();
+export type RapportId = z.infer<typeof RapportId>;
+
 export const RapportMetadata = z.object({
-  id: z.number(),
+  id: RapportId,
   orgnr: z.string(),
   orgNavn: z.string().optional(),
   type: RapportType,
@@ -24,3 +27,8 @@ export const RapportMetadata = z.object({
 });
 
 export type RapportMetadata = z.infer<typeof RapportMetadata>;
+
+export const REPORT_FORMAT_CSV = 'csv';
+export const REPORT_FORMAT_PDF = 'pdf';
+export const RapportFormat = z.enum([REPORT_FORMAT_CSV, REPORT_FORMAT_PDF]);
+export type RapportFormat = z.infer<typeof RapportFormat>;
