@@ -27,7 +27,7 @@ export default function RapportKort({ rapportMetadata }: RapportCardProps) {
         </BodyLong>
       </VStack>
       <ExpansionCard
-        aria-label="Nedlasningsknapper for oppgjørsrapporter"
+        aria-label="Nedlastingsknapper for oppgjørsrapporter"
         defaultOpen={true}
       >
         <ExpansionCard.Header>
