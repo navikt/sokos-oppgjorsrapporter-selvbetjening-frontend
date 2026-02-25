@@ -14,16 +14,16 @@ import { DownloadIcon } from '@navikt/aksel-icons';
 import { isoDatoTilNorskDato } from '@utils/dato-utils.ts';
 
 interface RapportCardProps {
-  rapportMetaData: RapportMetadata;
+  rapportMetadata: RapportMetadata;
 }
 
-export default function RapportKort({ rapportMetaData }: RapportCardProps) {
+export default function RapportKort({ rapportMetadata }: RapportCardProps) {
   return (
     <VStack gap="space-32">
       <VStack>
-        <Heading size="medium">{rapportMetaData.orgNavn}</Heading>
+        <Heading size="medium">{rapportMetadata.orgNavn}</Heading>
         <BodyLong>
-          {text.orgNrLabel}: {rapportMetaData.orgnr}
+          {text.orgNrLabel}: {rapportMetadata.orgnr}
         </BodyLong>
       </VStack>
       <ExpansionCard
@@ -33,11 +33,11 @@ export default function RapportKort({ rapportMetaData }: RapportCardProps) {
         <ExpansionCard.Header>
           <ExpansionCard.Title>
             Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt
-            {isoDatoTilNorskDato(rapportMetaData.datoValutert)}
+            {isoDatoTilNorskDato(rapportMetadata.datoValutert)}
           </ExpansionCard.Title>
         </ExpansionCard.Header>
         <ExpansionCard.Content>
-          <Innhold id={rapportMetaData.id} />
+          <Innhold id={rapportMetadata.id} />
         </ExpansionCard.Content>
       </ExpansionCard>
     </VStack>

@@ -9,7 +9,7 @@ import { hentRapportMetadataForPage } from '@src/pages/rapport/hentRapportMetada
 
 const { rapportId } = Astro.params;
 
-const { data: rapportMetaData, error } = await hentRapportMetadataForPage(
+const { data: rapportMetadata, error } = await hentRapportMetadataForPage(
   Number(rapportId),
   (params) => Astro.callAction(actions.hentRapportMetadata, params),
 );
@@ -26,8 +26,8 @@ const { data: rapportMetaData, error } = await hentRapportMetadataForPage(
       )
     }
     {
-      !error && rapportMetaData && (
-        <RapportKort rapportMetaData={rapportMetaData} client:load />
+      !error && rapportMetadata && (
+        <RapportKort rapportMetadata={rapportMetadata} client:load />
       )
     }
   </VStack>
