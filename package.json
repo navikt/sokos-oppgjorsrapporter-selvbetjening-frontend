@@ -30,7 +30,6 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "rollup-plugin-import-map": "3.0.0",
-    "vitest": "^4.0.18",
     "zod": "^4.3.5"
   },
   "devDependencies": {
@@ -44,7 +43,8 @@
     "husky": "9.1.7",
     "prettier": "3.6.2",
     "tsx": "4.20.5",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": ">=22.0.0"

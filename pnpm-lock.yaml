@@ -53,9 +53,6 @@ importers:
       rollup-plugin-import-map:
         specifier: 3.0.0
         version: 3.0.0
-      vitest:
-        specifier: ^4.0.18
-        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@24.5.2)(jsdom@28.0.0)(tsx@4.20.5)(yaml@2.8.2)
       zod:
         specifier: ^4.3.5
         version: 4.3.6
@@ -93,6 +90,9 @@ importers:
       typescript:
         specifier: 5.9.2
         version: 5.9.2
+      vitest:
+        specifier: ^4.0.18
+        version: 4.0.18(@opentelemetry/api@1.9.0)(@types/node@24.5.2)(jsdom@28.0.0)(tsx@4.20.5)(yaml@2.8.2)
 
 packages:
 
