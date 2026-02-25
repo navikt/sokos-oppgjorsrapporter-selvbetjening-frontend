@@ -1,0 +1,34 @@
+---
+import { ErrorSummary } from '@navikt/ds-react/ErrorSummary';
+import { actions } from 'astro:actions';
+import { Heading, VStack } from '@navikt/ds-react';
+import Layout from '@src/layouts/Layout.astro';
+import { text } from '@src/language/text.ts';
+import RapportKort from '@src/components/RapportKort';
+import { hentRapportMetadataForPage } from '@src/pages/rapport/hentRapportMetadata.ts';
+
+const { rapportId } = Astro.params;
+
+const { data: rapportMetadata, error } = await hentRapportMetadataForPage(
+  Number(rapportId),
+  (params) => Astro.callAction(actions.hentRapportMetadata, params),
+);
+---
+
+<Layout>
+  <VStack gap="space-32">
+    <div>
+      <Heading size={'large'}>{text.title}</Heading>
+    </div>
+    {
+      error && (
+        <ErrorSummary heading="Det oppstod en feil">{error}</ErrorSummary>
+      )
+    }
+    {
+      !error && rapportMetadata && (
+        <RapportKort rapportMetadata={rapportMetadata} client:load />
+      )
+    }
+  </VStack>
+</Layout>

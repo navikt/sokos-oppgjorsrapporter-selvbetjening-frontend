@@ -1,0 +1,10 @@
+{
+  "id": 1,
+  "orgnr": "123456789",
+  "orgNavn": "Test Bedrift AS",
+  "type": "ref-arbg",
+  "datoValutert": "2023-01-15",
+  "bankkonto": "12345678901",
+  "opprettet": "2023-01-15T19:35:18.580041Z",
+  "arkivert": false
+}

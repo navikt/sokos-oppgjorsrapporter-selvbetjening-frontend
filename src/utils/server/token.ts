@@ -1,22 +1,29 @@
-import { requestOboToken } from '@navikt/oasis';
+import { requestTokenxOboToken } from '@navikt/oasis';
 import { isLocal } from '@src/utils/server/environment.ts';
 import { generateKeyPair, SignJWT } from 'jose';
+import logger from '@utils/logger.ts';
 
-const audience = `${process.env.NAIS_CLUSTER_NAME}:min-side:example-api`;
+const targetApp = 'sokos-oppgjorsrapporter';
+const audience = `${process.env.SOKOS_OPPGJORSRAPPORTER_TOKEN_AUDIENCE}`;
 
-export const getOboToken = async (token: string): Promise<string> => {
-  const oboResult = await requestOboToken(token, audience);
-
+export const exchangeCitizenToken = async (token: string): Promise<string> => {
   if (isLocal) {
-    return 'Fake token';
+    return 'Uekte obo token for lokal utvikling';
   }
 
-  if (!oboResult.ok) {
-    console.error('Error getting access token: ' + oboResult.error);
-    throw new Error('Request oboToken for example-api failed ');
+  logger.info(
+    `Forsøker å hente tokenX obo token for ${targetApp} med audience ${audience}`,
+  );
+  const tokenxOboTokenResult = await requestTokenxOboToken(token, audience);
+
+  if (!tokenxOboTokenResult.ok) {
+    logger.error('Feil ved henting av token: ' + tokenxOboTokenResult.error);
+    throw new Error(
+      `Henting av oboToken for ${targetApp} feilet: ${tokenxOboTokenResult.error.message}`,
+    );
   }
 
-  return oboResult.token;
+  return tokenxOboTokenResult.token;
 };
 
 const alg = 'RS256';

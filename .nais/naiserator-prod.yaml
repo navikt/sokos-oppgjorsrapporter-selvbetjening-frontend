@@ -6,6 +6,10 @@ metadata:
   labels:
     team: oppgjorsrapporter
 spec:
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: nodejs
   idporten:
     enabled: true
     sidecar:
@@ -29,6 +33,7 @@ spec:
       rules:
         - application: nav-dekoratoren
           namespace: personbruker
+        - application: sokos-oppgjorsrapporter
   ingresses:
     - "https://www.nav.no/oppgjorsrapporter"
   resources:
@@ -40,5 +45,5 @@ spec:
   env:
     - name: SOKOS_OPPGJORSRAPPORTER_API
       value: http://sokos-oppgjorsrapporter
-    - name: SOKOS_OPPGJORSRAPPORTER_API_AUDIENCE
-      value: "api://prod-gcp.oppgjorsrapporter.sokos-oppgjorsrapporter/.default"
+    - name: SOKOS_OPPGJORSRAPPORTER_TOKEN_AUDIENCE
+      value: "prod-gcp:oppgjorsrapporter:sokos-oppgjorsrapporter"

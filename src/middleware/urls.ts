@@ -1,10 +1,10 @@
 import { getEnvironment } from '@src/utils/server/urls.ts';
 
-const REDIRECT_URI = {
-  local: 'http://localhost:4321/oppgjorsrapporter',
-  development: 'https://www.ansatt.dev.nav.no/oppgjorsrapporter',
-  production: 'https://www.nav.no/minside/oppgjorsrapporter',
+const REDIRECT_ORIGIN = {
+  local: 'http://localhost:4321',
+  development: 'https://www.ekstern.dev.nav.no',
+  production: 'https://www.nav.no',
 };
 
-export const redirectUri = REDIRECT_URI[getEnvironment()];
-export const loginUrl = `/oppgjorsrapporter/oauth2/login?redirect=${redirectUri}`;
+export const redirectOrigin = REDIRECT_ORIGIN[getEnvironment()];
+export const loginUrl = `/oppgjorsrapporter/oauth2/login?redirect=${redirectOrigin}/oppgjorsrapporter`;

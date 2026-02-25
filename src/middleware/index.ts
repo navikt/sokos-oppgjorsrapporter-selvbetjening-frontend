@@ -4,10 +4,19 @@ import { isInternal } from './utils';
 import { isLocal } from '@src/utils/server/urls';
 import { getToken, validateToken } from '@navikt/oasis';
 import { localToken } from '@src/utils/server/token';
+import logger from '@utils/logger.ts';
+
+const basePath = '/oppgjorsrapporter';
 
 export const onRequest = defineMiddleware(async (context, next) => {
-  const token = getToken(context.request.headers);
-  const params = encodeURIComponent(context.url.search);
+  let path = context.url.pathname + context.url.search;
+
+  // Fjerner base path for å unngå duplikat i redirect URL
+  if (path.startsWith(basePath)) {
+    path = path.slice(basePath.length) || '/';
+  }
+
+  const redirectPath = encodeURIComponent(path);
 
   if (isLocal) {
     context.locals.token = await localToken({ pid: '12345678912' });
@@ -18,21 +27,18 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
 
+  const token = getToken(context.request.headers);
   if (!token) {
-    console.info(
-      'Could not find any bearer token on the request. Redirecting to login.',
+    logger.info(
+      'Kunne ikke finne noen bearer token i requesten. Ruter til innlogging',
     );
-    return context.redirect(`${loginUrl}${params}`);
+    return context.redirect(`${loginUrl}${redirectPath}`);
   }
 
   const validation = await validateToken(token);
 
   if (!validation.ok) {
-    const error = new Error(
-      `Invalid JWT token found (cause: ${validation.errorType} ${validation.error}, redirecting to login.`,
-    );
-    console.error(error);
-    return context.redirect(`${loginUrl}${params}`);
+    return context.redirect(`${loginUrl}${redirectPath}`);
   }
 
   context.locals.token = token;

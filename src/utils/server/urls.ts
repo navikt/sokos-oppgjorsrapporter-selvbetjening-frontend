@@ -1,7 +1,9 @@
 const isDevelopment = process.env.NAIS_CLUSTER_NAME === 'dev-gcp';
 export const isLocal = process.env.NODE_ENV === 'development';
 
-export const getEnvironment = () => {
+type Environment = 'local' | 'development' | 'production';
+
+export function getEnvironment(): Environment {
   if (isDevelopment) {
     return 'development';
   }
@@ -11,18 +13,18 @@ export const getEnvironment = () => {
   }
 
   return 'production';
-};
+}
 
-type EnvUrl = { development: string; production: string; local: string };
+type EnvUrl = Record<Environment, string>;
 
-const OPPGJORSRAPPORTER_API_URL = {
-  local: 'http://localhost:3000/api/oppgjorsrapporter',
-  development: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/oppgjorsrapporter`,
-  production: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/oppgjorsrapporter`,
+const OPPGJORSRAPPORTER_API_URL: EnvUrl = {
+  local: 'http://localhost:3000/api/rapport/v1',
+  development: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/rapport/v1`,
+  production: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/rapport/v1`,
 };
 
 const BASE_URL: EnvUrl = {
-  local: 'http://localhost:4321/oppgjorsrapporter',
+  local: 'http://localhost:4321/oppgjorsrapporter/',
   development: 'https://www.ansatt.dev.nav.no/oppgjorsrapporter/',
   production: 'https://www.nav.no/oppgjorsrapporter/',
 };
