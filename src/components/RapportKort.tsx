@@ -68,10 +68,22 @@ function Innhold({ id }: InnholdProps) {
       }
 
       const blob = await response.blob();
+      let filename = `oppgjorsrapport_${id}.${type}`;
+      const cdValue = response.headers?.get('Content-Disposition');
+      if (cdValue) {
+        const filenameMatch =
+          /filename\s*=\s*("(?<quoted>(?:[^"\\]|\\.)+)"|(?<unquoted>[^;]+))/.exec(
+            cdValue,
+          );
+        if (filenameMatch && filenameMatch.groups) {
+          const { quoted, unquoted } = filenameMatch.groups;
+          filename = quoted || unquoted;
+        }
+      }
       const blobUrl = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = blobUrl;
-      a.download = `oppgjorsrapport_arbeidsgiver_${id}.${type}`;
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       a.remove();
