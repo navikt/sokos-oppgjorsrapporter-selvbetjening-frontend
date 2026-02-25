@@ -1,7 +1,9 @@
-const isProduction = window.location.href.includes('www.nav.no');
-const isDevelopment = window.location.href.includes('www.ansatt.dev.nav.no');
+const isProduction = window.location.hostname === 'www.nav.no';
+const isDevelopment = window.location.hostname.endsWith('.dev.nav.no');
 
-export const getEnvironment = () => {
+type Environment = 'local' | 'development' | 'production';
+
+export function getEnvironment(): Environment {
   if (isDevelopment) {
     return 'development';
   }
@@ -9,9 +11,9 @@ export const getEnvironment = () => {
     return 'production';
   }
   return 'local';
-};
+}
 
-type EnvUrl = { development: string; production: string; local: string };
+type EnvUrl = Record<Environment, string>;
 
 const BASE_URL: EnvUrl = {
   local: 'http://localhost:3000',
