@@ -13,9 +13,9 @@ Løsningen bruker API-endepunkter i [sokos-oppgjorsrapporter](https://github.com
 4. Bygge sokos-oppgjorsrapporter-selvbetjening-frontend: `pnpm run build`
 5. Start hono mockserver: `pnpm run mock`
 6. Med mockserver kjørende i egen terminal, start appen: `pnpm run dev`
-7. Appen nås på http://localhost:4321/oppgjorsrapporter?id=1
+7. Appen nås på http://localhost:4321/oppgjorsrapporter/rapport/1
 
-8. Kjør unit-tester: `pnpm test`
+8. Kjør unit-tester: `pnpm run test`
 9. Kjør [Playwright](https://playwright.dev/)-tester:
     - Be Playwright om å hente aktuelle browsere etc.: `pnpm exec playwright install`
     - Kjør testene: `pnpm playwright test`
