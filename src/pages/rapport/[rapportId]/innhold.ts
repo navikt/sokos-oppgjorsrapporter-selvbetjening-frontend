@@ -55,8 +55,14 @@ export const GET: APIRoute = async ({ url, params, locals }) => {
     }
 
     const blob = await response.blob();
+    const cdValue = response.headers?.get('Content-Disposition');
+    const cdHeaders: { 'Content-Disposition'?: string } =
+      cdValue === null ? {} : { 'Content-Disposition': cdValue };
     return new Response(blob, {
-      headers: { 'Content-Type': accept },
+      headers: {
+        'Content-Type': accept,
+        ...cdHeaders,
+      },
     });
   } catch (error: any) {
     logger.error(
