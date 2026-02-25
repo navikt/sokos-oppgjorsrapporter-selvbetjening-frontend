@@ -9,4 +9,5 @@
       "@utils/*": ["./src/utils/*"]
     }
   },
+  "exclude": ["playwright-report", "dist", "node_modules"]
 }
