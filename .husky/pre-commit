@@ -1,1 +1,1 @@
-npm run build && npm run prettier
+pnpm run build && pnpm run prettier
