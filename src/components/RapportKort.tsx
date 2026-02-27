@@ -6,15 +6,40 @@ import {
   ErrorSummary,
   ExpansionCard,
   Heading,
+  HStack,
   VStack,
 } from '@navikt/ds-react';
 import { text } from '@src/language/text.ts';
-import type { RapportMetadata } from '@src/schemas/types.ts';
+import {
+  type RapportMetadata,
+  REPORT_TYPE_REF_ARBG,
+  REPORT_TYPE_TREKK_HEND,
+  REPORT_TYPE_TREKK_KRED,
+} from '@src/schemas/types.ts';
 import { DownloadIcon } from '@navikt/aksel-icons';
 import { isoDatoTilNorskDato } from '@utils/dato-utils.ts';
+import { match, P } from 'ts-pattern';
 
 interface RapportCardProps {
   rapportMetadata: RapportMetadata;
+}
+
+function rapportTittel(rapport: RapportMetadata): string {
+  return match(rapport)
+    .with(
+      { type: REPORT_TYPE_REF_ARBG, datoValutert: P.select() },
+      (utbetalt) =>
+        `Oppgjørsrapport arbeidsgiver – refusjoner fra Nav (utbetalt ${isoDatoTilNorskDato(utbetalt)})`,
+    )
+    .with(
+      { type: REPORT_TYPE_TREKK_HEND },
+      () => 'Trekkhendelser - tilbakemelding fra Nav', // TODO: Dato eller annen rapport-id?
+    )
+    .with(
+      { type: REPORT_TYPE_TREKK_KRED },
+      () => 'Trekkoppgjør fra Nav', // TODO: Dato eller annen rapport-id?
+    )
+    .exhaustive();
 }
 
 export default function RapportKort({ rapportMetadata }: RapportCardProps) {
@@ -32,8 +57,7 @@ export default function RapportKort({ rapportMetadata }: RapportCardProps) {
       >
         <ExpansionCard.Header>
           <ExpansionCard.Title>
-            Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt
-            {isoDatoTilNorskDato(rapportMetadata.datoValutert)}
+            {rapportTittel(rapportMetadata)}
           </ExpansionCard.Title>
         </ExpansionCard.Header>
         <ExpansionCard.Content>
@@ -97,28 +121,24 @@ function Innhold({ id }: InnholdProps) {
 
   return (
     <Box paddingBlock={'2'}>
-      <VStack gap="2" align="center">
+      <VStack gap="space-32" align="center">
         {error && (
           <ErrorSummary heading="Feil ved nedlasting">{error}</ErrorSummary>
         )}
-        <Button
-          variant="secondary"
-          size="medium"
-          onClick={() => hentRapport('pdf')}
-          icon={<DownloadIcon aria-hidden />}
-          loading={isLoading === 'pdf'}
-        >
-          Oppgjørsrapport arbeidsgiver – refusjoner fra Nav - PDF
-        </Button>
-        <Button
-          variant="secondary"
-          size="medium"
-          onClick={() => hentRapport('csv')}
-          icon={<DownloadIcon aria-hidden />}
-          loading={isLoading === 'csv'}
-        >
-          Oppgjørsrapport arbeidsgiver – refusjoner fra Nav - CSV
-        </Button>
+        <HStack gap="space-32" justify="center">
+          {(['pdf', 'csv'] as const).map((format) => (
+            <Button
+              variant="primary"
+              size="medium"
+              onClick={() => hentRapport(format)}
+              icon={<DownloadIcon aria-hidden />}
+              iconPosition="right"
+              loading={isLoading === format}
+            >
+              Last ned {format.toUpperCase()}
+            </Button>
+          ))}
+        </HStack>
       </VStack>
     </Box>
   );
