@@ -33,6 +33,7 @@ jobs:
     with:
       node-version: '24'
       team: oppgjorsrapporter
+      build-command: 'pnpm run build && pnpm prune --prod'
     secrets: inherit
 
   deploy-dev:

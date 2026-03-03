@@ -16,6 +16,7 @@ jobs:
     secrets: inherit
     with:
       team: oppgjorsrapporter
+      build-command: 'pnpm run build && pnpm prune --prod'
       node-version: '24'
       image-tag: snapshot
 
