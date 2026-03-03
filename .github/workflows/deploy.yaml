@@ -33,6 +33,7 @@ jobs:
     with:
       node-version: '24'
       team: oppgjorsrapporter
+      build-command: 'pnpm run build && rm -rf node_modules && pnpm install --prod --frozen-lockfile --ignore-scripts --no-optional'
     secrets: inherit
 
   deploy-dev:
