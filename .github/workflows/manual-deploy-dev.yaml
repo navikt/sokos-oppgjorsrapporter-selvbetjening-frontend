@@ -16,7 +16,7 @@ jobs:
     secrets: inherit
     with:
       team: oppgjorsrapporter
-      build-command: 'pnpm run build && pnpm prune --prod --ignore-scripts'
+      build-command: 'pnpm run build && rm -rf node_modules && pnpm install --prod --frozen-lockfile --ignore-scripts --no-optional'
       node-version: '24'
       image-tag: snapshot
 
