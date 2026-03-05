@@ -33,4 +33,6 @@ jobs:
   playwright-test:
     name: Playwright test
     uses: navikt/pengeflyt-gha-workflows/.github/workflows/playwright.yaml@main
+    with:
+      node-version: '24'
     secrets: inherit

@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "dev:mock": "concurrently \"pnpm dev\" \"tsx mock/server.ts\"",
     "start": "astro dev",
     "build": "astro check && astro build",
     "mock": "tsx mock/server.ts",
@@ -15,44 +16,48 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
+    "@astrojs/check": "^0.9.6",
     "@astrojs/node": "^9.5.4",
-    "@astrojs/react": "^4.3.1",
+    "@astrojs/react": "^4.4.2",
     "@navikt/aksel-icons": "7.31.0",
     "@navikt/ds-react": "7.31.0",
-    "@navikt/nav-dekoratoren-moduler": "3.4.0",
-    "@navikt/oasis": "3.8.0",
+    "@navikt/nav-dekoratoren-moduler": "3.6.2",
+    "@navikt/oasis": "4.1.4",
     "astro": "^5.18.0",
-    "dayjs": "^1.11.18",
-    "jose": "6.1.0",
+    "dayjs": "^1.11.19",
+    "jose": "6.2.0",
     "pino-http": "^11.0.0",
     "prettier-plugin-astro": "0.14.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "rollup-plugin-import-map": "3.0.0",
     "ts-pattern": "^5.9.0",
-    "zod": "^4.3.5"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.10.2",
-    "@hono/node-server": "1.19.4",
-    "@playwright/test": "^1.55.0",
+    "@axe-core/playwright": "^4.11.1",
+    "@hono/node-server": "^1.19.11",
+    "@playwright/test": "^1.58.2",
     "@types/node": "24.5.2",
-    "@types/react": "18.x",
-    "@types/react-dom": "18.x",
-    "hono": "4.11.10",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "concurrently": "^9.2.1",
+    "hono": "4.12.5",
     "husky": "9.1.7",
-    "prettier": "3.6.2",
-    "tsx": "4.20.5",
-    "typescript": "5.9.2",
+    "prettier": "3.8.1",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
     "vitest": "^4.0.18"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "pnpm": ">=10.16.0",
+    "node": ">=22.21.0"
   },
   "pnpm": {
     "overrides": {
-      "rollup": "4.59.0"
+      "rollup": "4.59.0",
+      "lodash": "4.17.23",
+      "svgo": "4.0.1"
     }
   }
 }
