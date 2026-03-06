@@ -28,8 +28,8 @@
     "jose": "6.2.0",
     "pino-http": "^11.0.0",
     "prettier-plugin-astro": "0.14.1",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "rollup-plugin-import-map": "3.0.0",
     "ts-pattern": "^5.9.0",
     "zod": "^4.3.6"
