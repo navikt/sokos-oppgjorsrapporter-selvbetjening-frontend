@@ -59,15 +59,19 @@ export default function RapportKort({ rapportMetadata }: RapportCardProps) {
           </LocalAlert.Header>
           <LocalAlert.Content>
             <BodyLong>
-              I april 2026 starter vi å sende ut oppgjørsrapporten for
-              arbeidsgiver -refusjoner fra Nav (tidligere kalt K27) fra den nye
-              Altinn 3-løsningen. Rapporten vil også sendes ut fra den gamle
-              løsningen ut mai 2026 og det vil da i overgangsperioden komme to
-              rapporter med likt innhold. Dette gjør vi for å imøtekomme de som
-              trenger litt tid for å tilpasse sine rutiner. Rapportene vil
-              inneholde den samme informasjonen og ha samme utbetalingsdato, men
-              vil ha forskjellig tittel. Du trenger derfor kun å laste ned én av
-              dem.
+              Nav har nå begynt å sende ut oppgjørsrapporter (tidligere kalt
+              K27, T12, og T14) via vår nye Altinn 3-baserte løsning.
+            </BodyLong>
+            <BodyLong>
+              For å imøtekomme de som trenger litt tid til å tilpasse sine
+              rutiner, vil vi også <b>ut mai 2026</b> fortsette å sende
+              tilsvarende rapporter fra den gamle løsningen.
+            </BodyLong>
+            <BodyLong>
+              Rapportene fra ny og gammel løsning inneholder samme informasjon
+              og svarer til samme utbetaling, men vil ha forskjellig tittel i
+              Altinn-innboksen. Du trenger derfor{' '}
+              <b>kun å laste ned én av dem</b>.
             </BodyLong>
           </LocalAlert.Content>
         </LocalAlert>
