@@ -120,7 +120,7 @@ function Innhold({ id }: InnholdProps) {
   };
 
   return (
-    <Box paddingBlock={'2'}>
+    <Box paddingBlock="space-8">
       <VStack gap="space-32" align="center">
         {error && (
           <ErrorSummary heading="Feil ved nedlasting">{error}</ErrorSummary>
@@ -128,6 +128,7 @@ function Innhold({ id }: InnholdProps) {
         <HStack gap="space-32" justify="center">
           {(['pdf', 'csv'] as const).map((format) => (
             <Button
+              key={format}
               variant="primary"
               size="medium"
               onClick={() => hentRapport(format)}
