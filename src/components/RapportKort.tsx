@@ -7,6 +7,7 @@ import {
   ExpansionCard,
   Heading,
   HStack,
+  LocalAlert,
   VStack,
 } from '@navikt/ds-react';
 import { text } from '@src/language/text.ts';
@@ -45,11 +46,31 @@ function rapportTittel(rapport: RapportMetadata): string {
 export default function RapportKort({ rapportMetadata }: RapportCardProps) {
   return (
     <VStack gap="space-32">
-      <VStack>
-        <Heading size="medium">{rapportMetadata.orgNavn}</Heading>
-        <BodyLong>
-          {text.orgNrLabel}: {rapportMetadata.orgnr}
-        </BodyLong>
+      <VStack gap={'space-32'}>
+        <VStack>
+          <Heading size="medium">{rapportMetadata.orgNavn}</Heading>
+          <BodyLong>
+            {text.orgNrLabel}: {rapportMetadata.orgnr}
+          </BodyLong>
+        </VStack>
+        <LocalAlert status="warning">
+          <LocalAlert.Header>
+            <LocalAlert.Title>OBS, unngå doble nedlastinger!</LocalAlert.Title>
+          </LocalAlert.Header>
+          <LocalAlert.Content>
+            <BodyLong>
+              I april 2026 starter vi å sende ut oppgjørsrapporten for
+              arbeidsgiver -refusjoner fra Nav (tidligere kalt K27) fra den nye
+              Altinn 3-løsningen. Rapporten vil også sendes ut fra den gamle
+              løsningen ut mai 2026 og det vil da i overgangsperioden komme to
+              rapporter med likt innhold. Dette gjør vi for å imøtekomme de som
+              trenger litt tid for å tilpasse sine rutiner. Rapportene vil
+              inneholde den samme informasjonen og ha samme utbetalingsdato, men
+              vil ha forskjellig tittel. Du trenger derfor kun å laste ned én av
+              dem.
+            </BodyLong>
+          </LocalAlert.Content>
+        </LocalAlert>
       </VStack>
       <ExpansionCard
         aria-label="Nedlastingsknapper for oppgjørsrapporter"
