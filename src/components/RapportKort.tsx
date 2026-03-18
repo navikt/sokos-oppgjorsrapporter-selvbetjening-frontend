@@ -58,8 +58,8 @@ export default function RapportKort({ rapportMetadata }: RapportCardProps) {
         </LocalAlert.Header>
         <LocalAlert.Content>
           <BodyLong>
-            Nav har nå begynt å sende ut oppgjørsrapporter (tidligere kalt K27,
-            T12, og T14) via vår nye Altinn 3-baserte løsning.
+            Nav har nå begynt å sende ut oppgjørsrapporter (tidligere kalt K27
+            og T14) via vår nye Altinn 3-baserte løsning.
           </BodyLong>
           <BodyLong>
             For å imøtekomme de som trenger litt tid til å tilpasse sine
