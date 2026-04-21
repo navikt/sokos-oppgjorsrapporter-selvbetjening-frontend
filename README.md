@@ -20,6 +20,14 @@ Løsningen bruker API-endepunkter i [sokos-oppgjorsrapporter](https://github.com
     - Be Playwright om å hente aktuelle browsere etc.: `pnpm playwright install`
     - Kjør testene: `pnpm pwtest`
 
+## Testing i dev
+
+Under finnes (syntetiske) fnr man kan bruke for å teste mot gitte URLer i dev:
+
+| URL                                                                       | fnr         | Kommentar       |
+|---------------------------------------------------------------------------|-------------|-----------------|
+| [Rapport](https://www.ekstern.dev.nav.no/oppgjorsrapporter/rapport/57309) | 10926899126 | Skal ha tilgang |
+
 # Henvendelser
 
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på github.
