@@ -7,10 +7,10 @@ export default defineConfig({
   base: '/oppgjorsrapporter',
   build: {
     inlineStylesheets: 'always',
+    assetsPrefix:
+      'https://cdn.nav.no/oppgjorsrapporter/sokos-oppgjorsrapporter-selvbetjening-frontend',
   },
-  integrations: [
-    react(),
-  ],
+  integrations: [react()],
   output: 'server',
   adapter: node({
     mode: 'standalone',

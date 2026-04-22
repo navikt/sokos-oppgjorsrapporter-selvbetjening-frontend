@@ -31,9 +31,11 @@ jobs:
     name: Build/test & push image
     uses: navikt/pengeflyt-gha-workflows/.github/workflows/node-build-push-image-v2.yaml@main
     with:
-      node-version: '24'
       team: oppgjorsrapporter
       build-command: 'pnpm run build && rm -rf node_modules && pnpm install --prod --frozen-lockfile --ignore-scripts --no-optional'
+      node-version: '24'
+      cdn-source: './dist/client/_astro'
+      cdn-destination: 'sokos-oppgjorsrapporter-selvbetjening-frontend'
     secrets: inherit
 
   deploy-dev:
