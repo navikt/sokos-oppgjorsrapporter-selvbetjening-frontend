@@ -63,8 +63,13 @@ export default function RapportKort({ rapportMetadata }: RapportCardProps) {
           </BodyLong>
           <BodyLong>
             For å imøtekomme de som trenger litt tid til å tilpasse sine
-            rutiner, vil vi også <b>ut mai 2026</b> fortsette å sende
-            tilsvarende rapporter fra den gamle løsningen.
+            rutiner, vil vi også{' '}
+            <b>
+              {rapportMetadata.type === 'ref-arbg'
+                ? 'frem til 15. juni 2026'
+                : 'ut mai 2026'}
+            </b>{' '}
+            fortsette å sende tilsvarende rapporter fra den gamle løsningen.
           </BodyLong>
           <BodyLong>
             Rapportene fra ny og gammel løsning inneholder samme informasjon og
