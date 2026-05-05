@@ -47,7 +47,9 @@ export default function RapportKort({ rapportMetadata }: RapportCardProps) {
   return (
     <VStack gap="space-32">
       <VStack>
-        <Heading size="medium">{rapportMetadata.orgNavn}</Heading>
+        <Heading size="medium" level="2">
+          {rapportMetadata.orgNavn}
+        </Heading>
         <BodyLong>
           {text.orgNrLabel}: {rapportMetadata.orgnr}
         </BodyLong>
@@ -151,7 +153,9 @@ function Innhold({ id }: InnholdProps) {
     <Box paddingBlock="space-8">
       <VStack gap="space-32" align="center">
         {error && (
-          <ErrorSummary heading="Feil ved nedlasting">{error}</ErrorSummary>
+          <ErrorSummary heading="Feil ved nedlasting">
+            <ErrorSummary.Item>{error}</ErrorSummary.Item>
+          </ErrorSummary>
         )}
         <HStack gap="space-32" justify="center">
           {(['pdf', 'csv'] as const).map((format) => (
