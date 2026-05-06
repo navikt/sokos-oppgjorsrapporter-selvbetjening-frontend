@@ -68,7 +68,7 @@ export default defineConfig({
     // },
   ],
   webServer: {
-    command: 'pnpm run dev',
+    command: 'pnpm run dev:mock',
     url: 'http://localhost:4321/oppgjorsrapporter/health',
     reuseExistingServer: !process.env.CI,
   },

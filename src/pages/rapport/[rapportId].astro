@@ -18,11 +18,13 @@ const { data: rapportMetadata, error } = await hentRapportMetadataForPage(
 <Layout>
   <VStack gap="space-32">
     <div>
-      <Heading size={'large'}>{text.title}</Heading>
+      <Heading size="large" level="1">{text.title}</Heading>
     </div>
     {
       error && (
-        <ErrorSummary heading="Det oppstod en feil">{error}</ErrorSummary>
+        <ErrorSummary heading="Det oppstod en feil">
+          <ErrorSummary.Item>{error}</ErrorSummary.Item>
+        </ErrorSummary>
       )
     }
     {
