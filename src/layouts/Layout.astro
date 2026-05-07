@@ -39,9 +39,9 @@ const Decorator = await fetchDecoratorReact({
     />
     <Decorator.HeadAssets />
   </head>
-  <body class="main">
+  <body>
     <Decorator.Header />
-    <main class={styles.container}>
+    <main id="maincontent" class={styles.container} role="main" tabindex="-1">
       <slot />
     </main>
     <Decorator.Footer />
