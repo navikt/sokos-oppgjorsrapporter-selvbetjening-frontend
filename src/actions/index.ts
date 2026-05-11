@@ -24,6 +24,7 @@ export const server = {
         const data = await fetchRapportMetadata(id, citizenToken);
         return RapportMetadata.parse(data);
       } catch (error: any) {
+        console.log(`Feil ved henting av rapportmetadata for id=${id}:`, error);
         throw new ActionError({
           code: 'INTERNAL_SERVER_ERROR',
           message: `Feil ved henting av rapportmetadata for id=${id}`,
