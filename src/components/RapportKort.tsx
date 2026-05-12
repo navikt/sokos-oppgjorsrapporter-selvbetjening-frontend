@@ -54,33 +54,36 @@ export default function RapportKort({ rapportMetadata }: RapportCardProps) {
           {text.orgNrLabel}: {rapportMetadata.orgnr}
         </BodyLong>
       </VStack>
-      <LocalAlert status="warning">
-        <LocalAlert.Header>
-          <LocalAlert.Title>OBS, unngå doble nedlastinger!</LocalAlert.Title>
-        </LocalAlert.Header>
-        <LocalAlert.Content>
-          <BodyLong>
-            Nav har nå begynt å sende ut oppgjørsrapporter (tidligere kalt K27
-            og T14) via vår nye Altinn 3-baserte løsning.
-          </BodyLong>
-          <BodyLong>
-            For å imøtekomme de som trenger litt tid til å tilpasse sine
-            rutiner, vil vi også{' '}
-            <b>
-              {rapportMetadata.type === 'ref-arbg'
-                ? 'frem til 15. juni 2026'
-                : 'ut mai 2026'}
-            </b>{' '}
-            fortsette å sende tilsvarende rapporter fra den gamle løsningen.
-          </BodyLong>
-          <BodyLong>
-            Rapportene fra ny og gammel løsning inneholder samme informasjon og
-            svarer til samme utbetaling, men vil ha forskjellig tittel i
-            Altinn-innboksen. Du trenger derfor <b>kun å laste ned én av dem</b>
-            .
-          </BodyLong>
-        </LocalAlert.Content>
-      </LocalAlert>
+      {(rapportMetadata.type === 'ref-arbg' ||
+        rapportMetadata.type === 'trekk-kred') && (
+        <LocalAlert status="warning">
+          <LocalAlert.Header>
+            <LocalAlert.Title>OBS, unngå doble nedlastinger!</LocalAlert.Title>
+          </LocalAlert.Header>
+          <LocalAlert.Content>
+            <BodyLong>
+              Nav har nå begynt å sende ut oppgjørsrapporter (tidligere kalt K27
+              og T14) via vår nye Altinn 3-baserte løsning.
+            </BodyLong>
+            <BodyLong>
+              For å imøtekomme de som trenger litt tid til å tilpasse sine
+              rutiner, vil vi også{' '}
+              <b>
+                {rapportMetadata.type === 'ref-arbg'
+                  ? 'frem til 15. juni 2026'
+                  : 'ut mai 2026'}
+              </b>{' '}
+              fortsette å sende tilsvarende rapporter fra den gamle løsningen.
+            </BodyLong>
+            <BodyLong>
+              Rapportene fra ny og gammel løsning inneholder samme informasjon
+              og svarer til samme utbetaling, men vil ha forskjellig tittel i
+              Altinn-innboksen. Du trenger derfor{' '}
+              <b>kun å laste ned én av dem</b>.
+            </BodyLong>
+          </LocalAlert.Content>
+        </LocalAlert>
+      )}
       <ExpansionCard
         aria-label="Nedlastingsknapper for oppgjørsrapporter"
         defaultOpen={true}

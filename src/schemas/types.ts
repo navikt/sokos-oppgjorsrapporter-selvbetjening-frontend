@@ -18,10 +18,10 @@ export type RapportId = z.infer<typeof RapportId>;
 export const RapportMetadata = z.object({
   id: RapportId,
   orgnr: z.string(),
-  orgNavn: z.string().optional(),
+  orgNavn: z.string().nullish(),
   type: RapportType,
   datoValutert: z.string(),
-  bankkonto: z.string().optional(),
+  bankkonto: z.string().nullish(),
   opprettet: z.string(),
   arkivert: z.boolean(),
 });
