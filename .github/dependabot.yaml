@@ -14,10 +14,27 @@ updates:
       time: "08:00"
       timezone: "Europe/Oslo"
     groups:
+      aksel:
+        patterns:
+          - "@navikt/aksel*"
+          - "@navikt/ds*"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+      astro:
+        patterns:
+          - "astro"
       all-minor-updates:
         update-types:
           - "minor"
           - "patch"
+        exclude-patterns:
+          - "@navikt/aksel-*"
+          - "@navikt/ds-*"
+          - "react"
+          - "react-dom"
+          - "astro"
 
   - package-ecosystem: "npm"
     directory: "/server"
