@@ -19,6 +19,11 @@ on:
   repository_dispatch:
     types: [dependabot-deploy]
 
+  workflow_dispatch:
+
+  schedule:
+    - cron: "31 8 3 * *"
+
 env:
   TZ: Europe/Oslo
 
@@ -46,9 +51,11 @@ jobs:
       cluster: dev-gcp
       resource: .nais/naiserator-dev.yaml
       image: ${{ needs.build.outputs.image }}
+
   deploy-prod:
     needs: [build, deploy-dev]
     name: Deploy to prod-gcp
+    if: github.ref == 'refs/heads/main'
     uses: navikt/pengeflyt-gha-workflows/.github/workflows/nais-app-deploy.yaml@main
     with:
       cluster: prod-gcp
