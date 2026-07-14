@@ -40,8 +40,8 @@ spec:
     limits:
       memory: 768Mi
     requests:
-      cpu: "20m"
-      memory: 128Mi
+      cpu: "65m"
+      memory: 672Mi
   env:
     - name: SOKOS_OPPGJORSRAPPORTER_API
       value: http://sokos-oppgjorsrapporter
