@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   BodyLong,
   Box,
@@ -20,6 +20,7 @@ import {
 import { DownloadIcon } from '@navikt/aksel-icons';
 import { isoDatoTilNorskDato } from '@utils/dato-utils.ts';
 import { match, P } from 'ts-pattern';
+import { setParams } from '@navikt/nav-dekoratoren-moduler';
 
 interface RapportCardProps {
   rapportMetadata: RapportMetadata;
@@ -44,6 +45,12 @@ function rapportTittel(rapport: RapportMetadata): string {
 }
 
 export default function RapportKort({ rapportMetadata }: RapportCardProps) {
+  const context =
+    rapportMetadata.type == 'ref-arbg' ? 'arbeidsgiver' : 'samarbeidspartner';
+  useEffect(() => {
+    setParams({ context });
+  }, [context]);
+
   return (
     <VStack gap="space-32">
       <VStack>
