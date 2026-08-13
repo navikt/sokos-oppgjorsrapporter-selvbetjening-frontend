@@ -19,4 +19,5 @@ jobs:
     uses: navikt/pengeflyt-gha-workflows/.github/workflows/node-build-pr-v2.yaml@main
     with:
       node-version: '24'
+      pnpm-version: '11'
     secrets: inherit
