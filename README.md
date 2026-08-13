@@ -6,6 +6,15 @@ Dette er en AstroJS frontend med IdPorten autentisering for
 
 Løsningen bruker API-endepunkter i [sokos-oppgjorsrapporter](https://github.com/navikt/sokos-oppgjorsrapporter) for å hente rapport metadata og rapport innhold.
 
+# Personal access token
+Pass på at du har et PAT-token i filen `~/.npmrc`. Filen bør se ut som dette:
+```
+//npm.pkg.github.com/:_authToken=TOKEN
+@navikt:registry=https://npm.pkg.github.com
+```
+
+Tokenet kan genereres på https://github.com/settings/tokens. For mer info se: https://github.com/navikt/frontend#installere-pakker-lokalt
+
 #  Kjøre appen lokalt
 1. Installere [Node.js](https://nodejs.dev/en/) (f.eks. med `brew install node`)
 2. Installer [pnpm](https://pnpm.io/) (med `brew install pnpm`)
