@@ -4,15 +4,26 @@ import { actions } from 'astro:actions';
 import { Heading, VStack } from '@navikt/ds-react';
 import Layout from '@src/layouts/Layout.astro';
 import { text } from '@src/language/text.ts';
-import RapportKort from '@src/components/RapportKort';
-import { hentRapportMetadataForPage } from '@src/pages/rapport/hentRapportMetadata.ts';
+import Rapportliste from '@src/components/Rapportliste';
 
 const { rapportId } = Astro.params;
 
-const { data: rapportMetadata, error } = await hentRapportMetadataForPage(
-  Number(rapportId),
-  (params) => Astro.callAction(actions.hentRapportMetadata, params),
-);
+const response = await (async () => {
+  const id = Number(rapportId);
+
+  if (isNaN(id) || !rapportId) {
+    return { error: 'Ukjent rapportid', data: null };
+  }
+
+  const { data, error } = await Astro.callAction(actions.hentRapportMetadata, {
+    id,
+  });
+
+  return {
+    error: error?.message ?? '',
+    data: data ?? null,
+  };
+})();
 ---
 
 <Layout>
@@ -21,15 +32,15 @@ const { data: rapportMetadata, error } = await hentRapportMetadataForPage(
       <Heading size="large" level="1">{text.title}</Heading>
     </div>
     {
-      error && (
+      response.error && (
         <ErrorSummary heading="Det oppstod en feil">
-          <ErrorSummary.Item>{error}</ErrorSummary.Item>
+          <ErrorSummary.Item>{response.error}</ErrorSummary.Item>
         </ErrorSummary>
       )
     }
     {
-      !error && rapportMetadata && (
-        <RapportKort rapportMetadata={rapportMetadata} client:load />
+      !response.error && response.data && (
+        <Rapportliste rapportliste={response.data} client:load />
       )
     }
   </VStack>

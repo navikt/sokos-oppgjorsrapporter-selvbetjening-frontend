@@ -1,9 +1,9 @@
-import { ActionError, defineAction } from 'astro:actions';
-import { z } from 'astro:schema';
-import { RapportMetadata } from '@src/schemas/types.ts';
-import { oppgjorsrapporterApiUrl } from '@utils/server/urls.ts';
+import {ActionError, defineAction} from 'astro:actions';
+import {z} from 'astro:schema';
+import {RapportMedNedlastningsinfo} from '@src/schemas/types.ts';
+import {oppgjorsrapporterApiUrl} from '@utils/server/urls.ts';
 import logger from '@utils/logger.ts';
-import { exchangeCitizenToken } from '@utils/server/token.ts';
+import {exchangeCitizenToken} from '@utils/server/token.ts';
 
 export const server = {
   hentRapportMetadata: defineAction({
@@ -21,8 +21,7 @@ export const server = {
       }
 
       try {
-        const data = await fetchRapportMetadata(id, citizenToken);
-        return RapportMetadata.parse(data);
+        return await fetchRapportMedNedlastningsinfo(id, citizenToken);
       } catch (error: any) {
         logger.warn(error, `Feil ved henting av rapportmetadata for id=${id}`);
         throw new ActionError({
@@ -34,12 +33,12 @@ export const server = {
   }),
 };
 
-const fetchRapportMetadata = async (
+const fetchRapportMedNedlastningsinfo = async (
   id: string | number,
   citizenToken: string,
-): Promise<RapportMetadata> => {
+): Promise<RapportMedNedlastningsinfo> => {
   const tokenXToken = await exchangeCitizenToken(citizenToken);
-  const url = `${oppgjorsrapporterApiUrl}/${id}`;
+  const url = `${oppgjorsrapporterApiUrl}/${id}/utvidet`;
 
   logger.info(`Forsøker henting av rapport metadata for id=${id} fra ${url}`);
 

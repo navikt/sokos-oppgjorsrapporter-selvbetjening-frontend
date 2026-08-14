@@ -1,110 +1,59 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
-  BodyLong,
   Box,
   Button,
   ErrorSummary,
   ExpansionCard,
-  Heading,
   HStack,
-  LocalAlert,
   VStack,
 } from '@navikt/ds-react';
-import { text } from '@src/language/text.ts';
 import {
   type RapportMetadata,
+  RapportType,
   REPORT_TYPE_REF_ARBG,
   REPORT_TYPE_TREKK_HEND,
   REPORT_TYPE_TREKK_KRED,
 } from '@src/schemas/types.ts';
 import { DownloadIcon } from '@navikt/aksel-icons';
 import { isoDatoTilNorskDato } from '@utils/dato-utils.ts';
-import { match, P } from 'ts-pattern';
-import { setParams } from '@navikt/nav-dekoratoren-moduler';
 
 interface RapportCardProps {
   rapportMetadata: RapportMetadata;
+  rapportType: RapportType;
 }
 
-function rapportTittel(rapport: RapportMetadata): string {
-  return match(rapport)
-    .with(
-      { type: REPORT_TYPE_REF_ARBG, datoValutert: P.select() },
-      (utbetalt) =>
-        `Oppgjørsrapport arbeidsgiver – refusjoner fra Nav (utbetalt ${isoDatoTilNorskDato(utbetalt)})`,
-    )
-    .with(
-      { type: REPORT_TYPE_TREKK_HEND },
-      () => 'Trekkhendelser - tilbakemelding fra Nav', // TODO: Dato eller annen rapport-id?
-    )
-    .with(
-      { type: REPORT_TYPE_TREKK_KRED },
-      () => 'Trekkoppgjør fra Nav', // TODO: Dato eller annen rapport-id?
-    )
-    .exhaustive();
+function rapportTittel(
+  rapportType: RapportType,
+  rapport: RapportMetadata,
+): string {
+  switch (rapportType) {
+    case REPORT_TYPE_REF_ARBG:
+      return `Oppgjørsrapport arbeidsgiver – refusjoner fra Nav (utbetalt ${isoDatoTilNorskDato(rapport.datoValutert)})`;
+    case REPORT_TYPE_TREKK_HEND:
+      return 'Trekkhendelser - tilbakemelding fra Nav'; // TODO: Dato eller annen rapport-id?
+    case REPORT_TYPE_TREKK_KRED:
+      return 'Trekkoppgjør fra Nav'; // TODO: Dato eller annen rapport-id?
+  }
 }
 
-export default function RapportKort({ rapportMetadata }: RapportCardProps) {
-  const context =
-    rapportMetadata.type == 'ref-arbg' ? 'arbeidsgiver' : 'samarbeidspartner';
-  useEffect(() => {
-    setParams({ context });
-  }, [context]);
-
+export default function RapportKort({
+  rapportMetadata,
+  rapportType,
+}: RapportCardProps) {
   return (
-    <VStack gap="space-32">
-      <VStack>
-        <Heading size="medium" level="2">
-          {rapportMetadata.orgNavn}
-        </Heading>
-        <BodyLong>
-          {text.orgNrLabel}: {rapportMetadata.orgnr}
-        </BodyLong>
-      </VStack>
-      {(rapportMetadata.type === 'ref-arbg' ||
-        rapportMetadata.type === 'trekk-kred') && (
-        <LocalAlert status="warning">
-          <LocalAlert.Header>
-            <LocalAlert.Title>OBS, unngå doble nedlastinger!</LocalAlert.Title>
-          </LocalAlert.Header>
-          <LocalAlert.Content>
-            <BodyLong>
-              Nav har nå begynt å sende ut oppgjørsrapporter (tidligere kalt K27
-              og T14) via vår nye Altinn 3-baserte løsning.
-            </BodyLong>
-            <BodyLong>
-              For å imøtekomme de som trenger litt tid til å tilpasse sine
-              rutiner, vil vi også{' '}
-              <b>
-                {rapportMetadata.type === 'ref-arbg'
-                  ? 'frem til 15. juni 2026'
-                  : 'ut mai 2026'}
-              </b>{' '}
-              fortsette å sende tilsvarende rapporter fra den gamle løsningen.
-            </BodyLong>
-            <BodyLong>
-              Rapportene fra ny og gammel løsning inneholder samme informasjon
-              og svarer til samme utbetaling, men vil ha forskjellig tittel i
-              Altinn-innboksen. Du trenger derfor{' '}
-              <b>kun å laste ned én av dem</b>.
-            </BodyLong>
-          </LocalAlert.Content>
-        </LocalAlert>
-      )}
-      <ExpansionCard
-        aria-label="Nedlastingsknapper for oppgjørsrapporter"
-        defaultOpen={true}
-      >
-        <ExpansionCard.Header>
-          <ExpansionCard.Title>
-            {rapportTittel(rapportMetadata)}
-          </ExpansionCard.Title>
-        </ExpansionCard.Header>
-        <ExpansionCard.Content>
-          <Innhold id={rapportMetadata.id} />
-        </ExpansionCard.Content>
-      </ExpansionCard>
-    </VStack>
+    <ExpansionCard
+      aria-label="Nedlastingsknapper for oppgjørsrapporter"
+      defaultOpen={true}
+    >
+      <ExpansionCard.Header>
+        <ExpansionCard.Title>
+          {rapportTittel(rapportType, rapportMetadata)}
+        </ExpansionCard.Title>
+      </ExpansionCard.Header>
+      <ExpansionCard.Content>
+        <Innhold id={rapportMetadata.id} />
+      </ExpansionCard.Content>
+    </ExpansionCard>
   );
 }
 
