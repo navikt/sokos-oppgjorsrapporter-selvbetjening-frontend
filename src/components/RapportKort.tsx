@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  BodyShort,
   Box,
   Button,
   ErrorSummary,
@@ -14,9 +15,13 @@ import {
   REPORT_TYPE_REF_ARBG,
   REPORT_TYPE_TREKK_HEND,
   REPORT_TYPE_TREKK_KRED,
+  type VariantMedNedlastningsinfo,
 } from '@src/schemas/types.ts';
 import { DownloadIcon } from '@navikt/aksel-icons';
-import { isoDatoTilNorskDato } from '@utils/dato-utils.ts';
+import {
+  isoDateTimeTilNorskDatoMedKlokkeslett,
+  isoDatoTilNorskDato,
+} from '@utils/dato-utils.ts';
 
 interface RapportCardProps {
   rapportMetadata: RapportMetadata;
@@ -63,37 +68,37 @@ export default function RapportKort({
         </ExpansionCard.Title>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
-        <Innhold id={rapportMetadata.id} />
+        <Innhold rapportMetadata={rapportMetadata} />
       </ExpansionCard.Content>
     </ExpansionCard>
   );
 }
 
 interface InnholdProps {
-  id: number;
+  rapportMetadata: RapportMetadata;
 }
 
-function Innhold({ id }: InnholdProps) {
+function Innhold({ rapportMetadata }: InnholdProps) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<'pdf' | 'csv' | null>(null);
 
-  const hentRapport = async (type: 'pdf' | 'csv') => {
+  const hentRapport = async (variant: VariantMedNedlastningsinfo) => {
     setError(null);
-    setIsLoading(type);
+    setIsLoading(variant.format);
 
     try {
-      const url = `/oppgjorsrapporter/rapport/${id}/innhold?type=${type}`;
+      const url = `/oppgjorsrapporter/rapport/${rapportMetadata.id}/innhold?type=${variant.format}`;
       const response = await fetch(url);
 
       if (!response.ok) {
         setError(
-          `Noe gikk galt ved nedlasting av ${type.toUpperCase()}-rapporten.`,
+          `Noe gikk galt ved nedlasting av ${variant.format.toUpperCase()}-rapporten.`,
         );
         return;
       }
 
       const blob = await response.blob();
-      let filename = `oppgjorsrapport_${id}.${type}`;
+      let filename = variant.filnavn;
       const cdValue = response.headers?.get('Content-Disposition');
       if (cdValue) {
         const filenameMatch =
@@ -129,18 +134,25 @@ function Innhold({ id }: InnholdProps) {
           </ErrorSummary>
         )}
         <HStack gap="space-32" justify="center">
-          {(['pdf', 'csv'] as const).map((format) => (
-            <Button
-              key={format}
-              variant="primary"
-              size="medium"
-              onClick={() => hentRapport(format)}
-              icon={<DownloadIcon aria-hidden />}
-              iconPosition="right"
-              loading={isLoading === format}
-            >
-              Last ned {format.toUpperCase()}
-            </Button>
+          {rapportMetadata.varianterMedNedlastingsinfo.map((variant) => (
+            <VStack key={`${rapportMetadata.id}-${variant.format}`}>
+              <Button
+                variant="primary"
+                size="medium"
+                onClick={() => hentRapport(variant)}
+                icon={<DownloadIcon aria-hidden />}
+                iconPosition="right"
+                loading={isLoading === variant.format}
+              >
+                Last ned {variant.format.toUpperCase()}
+              </Button>
+              {variant.sistLastetNed && (
+                <BodyShort size="small">
+                  Sist lastet ned &nbsp;
+                  {isoDateTimeTilNorskDatoMedKlokkeslett(variant.sistLastetNed)}
+                </BodyShort>
+              )}
+            </VStack>
           ))}
         </HStack>
       </VStack>
