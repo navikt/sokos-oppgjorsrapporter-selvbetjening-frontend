@@ -17,7 +17,7 @@ import {
   REPORT_TYPE_TREKK_KRED,
   type VariantMedNedlastningsinfo,
 } from '@src/schemas/types.ts';
-import { DownloadIcon } from '@navikt/aksel-icons';
+import { DownloadIcon, FileTextIcon } from '@navikt/aksel-icons';
 import {
   isoDateTimeTilNorskDatoMedKlokkeslett,
   isoDatoTilNorskDato,
@@ -36,7 +36,7 @@ function rapportTittel(
 ): string {
   switch (rapportType) {
     case REPORT_TYPE_REF_ARBG:
-      return `Oppgjørsrapport arbeidsgiver – refusjoner fra Nav (utbetalt ${isoDatoTilNorskDato(rapport.datoValutert)})`;
+      return `Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt ${isoDatoTilNorskDato(rapport.datoValutert)}`;
     case REPORT_TYPE_TREKK_HEND:
       return 'Trekkhendelser - tilbakemelding fra Nav'; // TODO: Dato eller annen rapport-id?
     case REPORT_TYPE_TREKK_KRED:
@@ -68,9 +68,12 @@ export default function RapportKort({
       }}
     >
       <ExpansionCard.Header>
-        <ExpansionCard.Title>
-          {rapportTittel(rapportType, rapportMetadata)}
-        </ExpansionCard.Title>
+        <HStack wrap={false} gap="space-16" align="center">
+          <FileTextIcon aria-hidden fontSize="3rem" />
+          <ExpansionCard.Title>
+            {rapportTittel(rapportType, rapportMetadata)}
+          </ExpansionCard.Title>
+        </HStack>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
         <Innhold rapportMetadata={rapportMetadata} />
@@ -140,7 +143,11 @@ function Innhold({ rapportMetadata }: InnholdProps) {
         )}
         <HStack gap="space-32" justify="center">
           {rapportMetadata.varianterMedNedlastingsinfo.map((variant) => (
-            <VStack key={`${rapportMetadata.id}-${variant.format}`}>
+            <VStack
+              key={`${rapportMetadata.id}-${variant.format}`}
+              gap="space-8"
+              align="center"
+            >
               <Button
                 variant="primary"
                 size="medium"
