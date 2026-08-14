@@ -50,8 +50,13 @@ export default function RapportKort({
   valgtRapport,
   oppdaterValgtRapport,
 }: RapportCardProps) {
+  const alleredeLastetNed = !rapportMetadata.varianterMedNedlastingsinfo.some(
+    (variant) => !!variant.sistLastetNed,
+  );
+
   return (
     <ExpansionCard
+      data-color={alleredeLastetNed ? 'brand-beige' : 'accent'}
       aria-label="Nedlastingsknapper for oppgjørsrapporter"
       open={rapportMetadata.id === valgtRapport}
       onToggle={(open: boolean) => {
@@ -144,7 +149,7 @@ function Innhold({ rapportMetadata }: InnholdProps) {
                 iconPosition="right"
                 loading={isLoading === variant.format}
               >
-                Last ned {variant.format.toUpperCase()}
+                Last ned rapporten som {variant.format.toUpperCase()}
               </Button>
               {variant.sistLastetNed && (
                 <BodyShort size="small">
