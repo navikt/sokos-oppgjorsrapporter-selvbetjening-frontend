@@ -8,6 +8,7 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import {
+  type RapportId,
   type RapportMetadata,
   RapportType,
   REPORT_TYPE_REF_ARBG,
@@ -20,6 +21,8 @@ import { isoDatoTilNorskDato } from '@utils/dato-utils.ts';
 interface RapportCardProps {
   rapportMetadata: RapportMetadata;
   rapportType: RapportType;
+  valgtRapport: RapportId | null;
+  oppdaterValgtRapport: (rapportId: RapportId | null) => void;
 }
 
 function rapportTittel(
@@ -39,11 +42,20 @@ function rapportTittel(
 export default function RapportKort({
   rapportMetadata,
   rapportType,
+  valgtRapport,
+  oppdaterValgtRapport,
 }: RapportCardProps) {
   return (
     <ExpansionCard
       aria-label="Nedlastingsknapper for oppgjørsrapporter"
-      defaultOpen={true}
+      open={rapportMetadata.id === valgtRapport}
+      onToggle={(open: boolean) => {
+        if (open) {
+          oppdaterValgtRapport(rapportMetadata.id);
+        } else {
+          oppdaterValgtRapport(null);
+        }
+      }}
     >
       <ExpansionCard.Header>
         <ExpansionCard.Title>

@@ -14,8 +14,11 @@ api.use(
   }),
 );
 
-api.get('/api/rapport/v1/1/utvidet', (c) => {
-  return c.json(example);
+api.get('/api/rapport/v1/:rapportId/utvidet', (c) => {
+  return c.json({
+    ...example,
+    forespurtRapportId: Number(c.req.param('rapportId')),
+  });
 });
 
 serve(api);

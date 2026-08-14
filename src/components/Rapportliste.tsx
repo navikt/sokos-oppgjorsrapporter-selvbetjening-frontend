@@ -1,8 +1,8 @@
-import { RapportMedNedlastningsinfo } from '@src/schemas/types';
+import { type RapportId, RapportMedNedlastningsinfo } from '@src/schemas/types';
 import { text } from '@src/language/text';
 import RapportKort from '@src/components/RapportKort';
 import { BodyLong, Heading, LocalAlert, VStack } from '@navikt/ds-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { setParams } from '@navikt/nav-dekoratoren-moduler';
 
 interface RapportlisteProps {
@@ -15,6 +15,10 @@ export default function Rapportliste({ rapportliste }: RapportlisteProps) {
   useEffect(() => {
     setParams({ context });
   }, [context]);
+
+  const [valgtRapport, setValgtRapport] = useState<RapportId | null>(
+    rapportliste.forespurtRapportId,
+  );
 
   return (
     <VStack gap="space-32">
@@ -60,6 +64,8 @@ export default function Rapportliste({ rapportliste }: RapportlisteProps) {
         <RapportKort
           rapportMetadata={rapport}
           rapportType={rapportliste.type}
+          valgtRapport={valgtRapport}
+          oppdaterValgtRapport={setValgtRapport}
           key={rapport.id}
         />
       ))}

@@ -1,9 +1,9 @@
-import {ActionError, defineAction} from 'astro:actions';
-import {z} from 'astro:schema';
-import {RapportMedNedlastningsinfo} from '@src/schemas/types.ts';
-import {oppgjorsrapporterApiUrl} from '@utils/server/urls.ts';
+import { ActionError, defineAction } from 'astro:actions';
+import { z } from 'astro:schema';
+import { RapportMedNedlastningsinfo } from '@src/schemas/types.ts';
+import { oppgjorsrapporterApiUrl } from '@utils/server/urls.ts';
 import logger from '@utils/logger.ts';
-import {exchangeCitizenToken} from '@utils/server/token.ts';
+import { exchangeCitizenToken } from '@utils/server/token.ts';
 
 export const server = {
   hentRapportMetadata: defineAction({
