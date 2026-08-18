@@ -51,7 +51,7 @@ export default function RapportKort({
   oppdaterValgtRapport,
 }: RapportCardProps) {
   const alleredeLastetNed = !rapportMetadata.varianterMedNedlastingsinfo.some(
-    (variant) => !!variant.sistLastetNed,
+    (variant) => !!variant.nedlastingsinfo?.sistLastetNed,
   );
 
   return (
@@ -158,10 +158,12 @@ function Innhold({ rapportMetadata }: InnholdProps) {
               >
                 Last ned rapporten som {variant.format.toUpperCase()}
               </Button>
-              {variant.sistLastetNed && (
+              {variant.nedlastingsinfo != null && (
                 <BodyShort size="small">
                   Sist lastet ned &nbsp;
-                  {isoDateTimeTilNorskDatoMedKlokkeslett(variant.sistLastetNed)}
+                  {isoDateTimeTilNorskDatoMedKlokkeslett(
+                    variant.nedlastingsinfo?.sistLastetNed,
+                  )}
                 </BodyShort>
               )}
             </VStack>

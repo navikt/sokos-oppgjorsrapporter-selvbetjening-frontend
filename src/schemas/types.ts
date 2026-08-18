@@ -19,13 +19,16 @@ export type RapportId = z.infer<typeof RapportId>;
 export const REPORT_FORMAT_CSV = 'csv';
 export const REPORT_FORMAT_PDF = 'pdf';
 export const RapportFormat = z.enum([REPORT_FORMAT_CSV, REPORT_FORMAT_PDF]);
-export type RapportFormat = z.infer<typeof RapportFormat>;
+
+export const Nedlastingsinfo = z.object({
+  sistLastetNed: z.string(),
+  sistLastetNedAv: z.string(),
+});
 
 export const VariantMedNedlastningsinfo = z.object({
   format: RapportFormat,
   filnavn: z.string(),
-  sistLastetNed: z.string().nullable(),
-  sistLastetNedAv: z.string().nullable(),
+  nedlastingsinfo: Nedlastingsinfo,
 });
 export type VariantMedNedlastningsinfo = z.infer<
   typeof VariantMedNedlastningsinfo
