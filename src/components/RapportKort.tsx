@@ -57,7 +57,7 @@ export default function RapportKort({
   return (
     <ExpansionCard
       data-color={alleredeLastetNed ? 'brand-beige' : 'accent'}
-      aria-label="Nedlastingsknapper for oppgjørsrapporter"
+      aria-label={`Nedlastingsknapper for oppgjørsrapport med id ${rapportMetadata.id}`}
       open={rapportMetadata.id === valgtRapport}
       onToggle={(open: boolean) => {
         if (open) {
@@ -156,7 +156,7 @@ function Innhold({ rapportMetadata }: InnholdProps) {
                 iconPosition="right"
                 loading={isLoading === variant.format}
               >
-                Last ned rapporten som {variant.format.toUpperCase()}
+                Last ned {variant.format.toUpperCase()}
               </Button>
               {variant.nedlastingsinfo != null && (
                 <BodyShort size="small">
