@@ -6,6 +6,7 @@ import {
   ErrorSummary,
   ExpansionCard,
   HStack,
+  Tag,
   VStack,
 } from '@navikt/ds-react';
 import {
@@ -17,7 +18,7 @@ import {
   REPORT_TYPE_TREKK_KRED,
   type VariantMedNedlastningsinfo,
 } from '@src/schemas/types.ts';
-import { DownloadIcon, FileTextIcon } from '@navikt/aksel-icons';
+import { BellIcon, DownloadIcon, FileTextIcon } from '@navikt/aksel-icons';
 import {
   isoDateTimeTilNorskDatoMedKlokkeslett,
   isoDatoTilNorskDato,
@@ -50,7 +51,7 @@ export default function RapportKort({
   valgtRapport,
   oppdaterValgtRapport,
 }: RapportCardProps) {
-  const alleredeLastetNed = !rapportMetadata.varianterMedNedlastingsinfo.some(
+  const alleredeLastetNed = rapportMetadata.varianterMedNedlastingsinfo.some(
     (variant) => !!variant.nedlastingsinfo?.sistLastetNed,
   );
 
@@ -76,7 +77,7 @@ export default function RapportKort({
   return (
     <ExpansionCard
       data-rapport-id={rapportMetadata.id}
-      data-color={alleredeLastetNed ? 'brand-beige' : 'accent'}
+      data-color={alleredeLastetNed ? 'accent' : 'brand-beige'}
       aria-label={`Nedlastingsknapper for oppgjørsrapport med id ${rapportMetadata.id}`}
       open={rapportMetadata.id === valgtRapport}
       onToggle={(open: boolean) => {
@@ -91,7 +92,17 @@ export default function RapportKort({
         <HStack wrap={false} gap="space-16" align="center">
           <FileTextIcon aria-hidden fontSize="3rem" />
           <ExpansionCard.Title>
-            {rapportTittel(rapportType, rapportMetadata)}
+            <VStack>
+              {rapportTittel(rapportType, rapportMetadata)}
+              {!alleredeLastetNed && (
+                <ExpansionCard.Description>
+                  <Tag size="small" variant="outline" data-color="danger">
+                    <BellIcon aria-hidden />
+                    Ny rapport
+                  </Tag>
+                </ExpansionCard.Description>
+              )}
+            </VStack>
           </ExpansionCard.Title>
         </HStack>
       </ExpansionCard.Header>
