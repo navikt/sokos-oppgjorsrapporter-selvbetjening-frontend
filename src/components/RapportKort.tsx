@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   BodyShort,
   Box,
@@ -54,8 +54,28 @@ export default function RapportKort({
     (variant) => !!variant.nedlastingsinfo?.sistLastetNed,
   );
 
+  // -- Scroll til forespurt rapport
+  useEffect(() => {
+    const element = document.querySelector(
+      `[data-rapport-id="${valgtRapport}"]`,
+    );
+    if (element) {
+      // Dette ødelegger for tabindexen i chrome tydelivis, slik at "hopp til hovedinnhold" ikke er først i tabrekkefølgen
+      // element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // --
+      // Dette makverket under skroller siden til forespurt rapport uten å endre chrome sin tab focus
+      // Regner med at det er en bedre måte å gjøre dette på, men det er beyond me
+      const targetY = element.getBoundingClientRect().top + window.scrollY - 20;
+      window.scrollTo({
+        top: targetY,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
+
   return (
     <ExpansionCard
+      data-rapport-id={rapportMetadata.id}
       data-color={alleredeLastetNed ? 'brand-beige' : 'accent'}
       aria-label={`Nedlastingsknapper for oppgjørsrapport med id ${rapportMetadata.id}`}
       open={rapportMetadata.id === valgtRapport}

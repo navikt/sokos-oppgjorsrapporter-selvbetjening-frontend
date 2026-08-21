@@ -68,3 +68,16 @@ test('forespurt rapport er fargekodet riktig dersom den ikke er lastet ned', asy
 
   expect(farge).toEqual('brand-beige');
 });
+
+test('forespurt rapport er synlig (skrollet til)', async ({
+  page,
+  baseURL,
+}) => {
+  await page.goto(`${baseURL}/rapport/1`);
+
+  const rapportTittel = page.getByText(
+    'Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt 31.01.2026',
+  );
+  const rapportKort = page.locator('section').filter({ has: rapportTittel });
+  await expect(rapportKort).toBeInViewport();
+});
