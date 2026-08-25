@@ -16,7 +16,7 @@ import {
   REPORT_TYPE_REF_ARBG,
   REPORT_TYPE_TREKK_HEND,
   REPORT_TYPE_TREKK_KRED,
-  type VariantMedNedlastningsinfo,
+  type VariantMedNedlastingsinfo,
 } from '@src/schemas/types.ts';
 import { BellIcon, DownloadIcon, FileTextIcon } from '@navikt/aksel-icons';
 import {
@@ -121,7 +121,7 @@ function Innhold({ rapportMetadata }: InnholdProps) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<'pdf' | 'csv' | null>(null);
 
-  const hentRapport = async (variant: VariantMedNedlastningsinfo) => {
+  const hentRapport = async (variant: VariantMedNedlastingsinfo) => {
     setError(null);
     setIsLoading(variant.format);
 

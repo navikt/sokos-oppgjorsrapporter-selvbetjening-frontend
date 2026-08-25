@@ -1,4 +1,4 @@
-import { type RapportId, RapportMedNedlastningsinfo } from '@src/schemas/types';
+import { type RapportId, RapportMedNedlastingsinfo } from '@src/schemas/types';
 import { text } from '@src/language/text';
 import RapportKort from '@src/components/RapportKort';
 import { BodyLong, Heading, VStack } from '@navikt/ds-react';
@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { setParams } from '@navikt/nav-dekoratoren-moduler';
 
 interface RapportlisteProps {
-  rapportliste: RapportMedNedlastningsinfo;
+  rapportliste: RapportMedNedlastingsinfo;
 }
 
 export default function Rapportliste({ rapportliste }: RapportlisteProps) {

@@ -25,29 +25,29 @@ export const Nedlastingsinfo = z.object({
   sistLastetNedAv: z.string(),
 });
 
-export const VariantMedNedlastningsinfo = z.object({
+export const VariantMedNedlastingsinfo = z.object({
   format: RapportFormat,
   filnavn: z.string(),
   nedlastingsinfo: Nedlastingsinfo,
 });
-export type VariantMedNedlastningsinfo = z.infer<
-  typeof VariantMedNedlastningsinfo
+export type VariantMedNedlastingsinfo = z.infer<
+  typeof VariantMedNedlastingsinfo
 >;
 
 export const RapportMetadata = z.object({
   id: RapportId,
   datoValutert: z.string(),
-  varianterMedNedlastingsinfo: z.array(VariantMedNedlastningsinfo),
+  varianterMedNedlastingsinfo: z.array(VariantMedNedlastingsinfo),
 });
 export type RapportMetadata = z.infer<typeof RapportMetadata>;
 
-export const RapportMedNedlastningsinfo = z.object({
+export const RapportMedNedlastingsinfo = z.object({
   forespurtRapportId: RapportId,
   orgnr: z.string(),
   orgNavn: z.string().nullish(),
   type: RapportType,
   rapporter: z.array(RapportMetadata),
 });
-export type RapportMedNedlastningsinfo = z.infer<
-  typeof RapportMedNedlastningsinfo
+export type RapportMedNedlastingsinfo = z.infer<
+  typeof RapportMedNedlastingsinfo
 >;

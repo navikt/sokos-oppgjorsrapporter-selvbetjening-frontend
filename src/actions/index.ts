@@ -1,6 +1,6 @@
 import { ActionError, defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
-import { RapportMedNedlastningsinfo } from '@src/schemas/types.ts';
+import { RapportMedNedlastingsinfo } from '@src/schemas/types.ts';
 import { oppgjorsrapporterApiUrl } from '@utils/server/urls.ts';
 import logger from '@utils/logger.ts';
 import { exchangeCitizenToken } from '@utils/server/token.ts';
@@ -36,7 +36,7 @@ export const server = {
 const fetchRapportMedNedlastningsinfo = async (
   id: string | number,
   citizenToken: string,
-): Promise<RapportMedNedlastningsinfo> => {
+): Promise<RapportMedNedlastingsinfo> => {
   const tokenXToken = await exchangeCitizenToken(citizenToken);
   const url = `${oppgjorsrapporterApiUrl}/${id}/utvidet`;
 
