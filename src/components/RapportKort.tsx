@@ -98,7 +98,7 @@ export default function RapportKort({
                 <ExpansionCard.Description>
                   <Tag size="small" variant="outline" data-color="danger">
                     <BellIcon aria-hidden />
-                    Ny rapport
+                    Ulest rapport
                   </Tag>
                 </ExpansionCard.Description>
               )}
