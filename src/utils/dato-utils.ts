@@ -16,6 +16,11 @@ export function isoDatoTilNorskDato(date: string | undefined): string {
   return parsedDate.isValid() ? parsedDate.format(datoFormatNorsk) : date;
 }
 
+const datoFormat = new Intl.DateTimeFormat('nb-NO', {
+  dateStyle: 'short',
+  timeStyle: 'short',
+});
+
 export const isoDateTimeTilNorskDatoMedKlokkeslett = (input: string) => {
   // -- valider input
   const dato = new Date(input);
@@ -24,8 +29,5 @@ export const isoDateTimeTilNorskDatoMedKlokkeslett = (input: string) => {
   }
 
   // -- formater dato
-  return new Intl.DateTimeFormat('nb-NO', {
-    dateStyle: 'short',
-    timeStyle: 'short',
-  }).format(dato);
+  return datoFormat.format(dato);
 };
