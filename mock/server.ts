@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { cors } from 'hono/cors';
-import example from './data/rapport-meta-data.json';
+import example from './data/utvidet-rapport-meta-data.json';
 
 const api = new Hono();
 
@@ -14,8 +14,11 @@ api.use(
   }),
 );
 
-api.get('/api/rapport/v1/1', (c) => {
-  return c.json(example);
+api.get('/api/rapport/v1/:rapportId/utvidet', (c) => {
+  return c.json({
+    ...example,
+    forespurtRapportId: Number(c.req.param('rapportId')),
+  });
 });
 
 serve(api);

@@ -1,138 +1,143 @@
 import { useEffect, useState } from 'react';
 import {
-  BodyLong,
+  BodyShort,
   Box,
   Button,
   ErrorSummary,
   ExpansionCard,
-  Heading,
   HStack,
-  LocalAlert,
+  Tag,
   VStack,
 } from '@navikt/ds-react';
-import { text } from '@src/language/text.ts';
 import {
+  type RapportId,
   type RapportMetadata,
+  RapportType,
   REPORT_TYPE_REF_ARBG,
   REPORT_TYPE_TREKK_HEND,
   REPORT_TYPE_TREKK_KRED,
+  type VariantMedNedlastingsinfo,
 } from '@src/schemas/types.ts';
-import { DownloadIcon } from '@navikt/aksel-icons';
-import { isoDatoTilNorskDato } from '@utils/dato-utils.ts';
-import { match, P } from 'ts-pattern';
-import { setParams } from '@navikt/nav-dekoratoren-moduler';
+import { BellIcon, DownloadIcon, FileTextIcon } from '@navikt/aksel-icons';
+import {
+  isoDateTimeTilNorskDatoMedKlokkeslett,
+  isoDatoTilNorskDato,
+} from '@utils/dato-utils.ts';
 
 interface RapportCardProps {
   rapportMetadata: RapportMetadata;
+  rapportType: RapportType;
+  valgtRapport: RapportId | null;
+  oppdaterValgtRapport: (rapportId: RapportId | null) => void;
 }
 
-function rapportTittel(rapport: RapportMetadata): string {
-  return match(rapport)
-    .with(
-      { type: REPORT_TYPE_REF_ARBG, datoValutert: P.select() },
-      (utbetalt) =>
-        `Oppgjørsrapport arbeidsgiver – refusjoner fra Nav (utbetalt ${isoDatoTilNorskDato(utbetalt)})`,
-    )
-    .with(
-      { type: REPORT_TYPE_TREKK_HEND },
-      () => 'Trekkhendelser - tilbakemelding fra Nav', // TODO: Dato eller annen rapport-id?
-    )
-    .with(
-      { type: REPORT_TYPE_TREKK_KRED },
-      () => 'Trekkoppgjør fra Nav', // TODO: Dato eller annen rapport-id?
-    )
-    .exhaustive();
+function rapportTittel(
+  rapportType: RapportType,
+  rapport: RapportMetadata,
+): string {
+  switch (rapportType) {
+    case REPORT_TYPE_REF_ARBG:
+      return `Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt ${isoDatoTilNorskDato(rapport.datoValutert)}`;
+    case REPORT_TYPE_TREKK_HEND:
+      return 'Trekkhendelser - tilbakemelding fra Nav'; // TODO: Dato eller annen rapport-id?
+    case REPORT_TYPE_TREKK_KRED:
+      return 'Trekkoppgjør fra Nav'; // TODO: Dato eller annen rapport-id?
+  }
 }
 
-export default function RapportKort({ rapportMetadata }: RapportCardProps) {
-  const context =
-    rapportMetadata.type == 'ref-arbg' ? 'arbeidsgiver' : 'samarbeidspartner';
+export default function RapportKort({
+  rapportMetadata,
+  rapportType,
+  valgtRapport,
+  oppdaterValgtRapport,
+}: RapportCardProps) {
+  const alleredeLastetNed = rapportMetadata.varianterMedNedlastingsinfo.some(
+    (variant) => !!variant.nedlastingsinfo?.sistLastetNed,
+  );
+
+  // -- Scroll til forespurt rapport
   useEffect(() => {
-    setParams({ context });
-  }, [context]);
+    const element = document.querySelector(
+      `[data-rapport-id="${valgtRapport}"]`,
+    );
+    if (element) {
+      // Dette ødelegger for tabindexen i chrome tydelivis, slik at "hopp til hovedinnhold" ikke er først i tabrekkefølgen
+      // element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // --
+      // Dette makverket under skroller siden til forespurt rapport uten å endre chrome sin tab focus
+      // Regner med at det er en bedre måte å gjøre dette på, men det er beyond me
+      const targetY = element.getBoundingClientRect().top + window.scrollY - 20;
+      window.scrollTo({
+        top: targetY,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
 
   return (
-    <VStack gap="space-32">
-      <VStack>
-        <Heading size="medium" level="2">
-          {rapportMetadata.orgNavn}
-        </Heading>
-        <BodyLong>
-          {text.orgNrLabel}: {rapportMetadata.orgnr}
-        </BodyLong>
-      </VStack>
-      {(rapportMetadata.type === 'ref-arbg' ||
-        rapportMetadata.type === 'trekk-kred') && (
-        <LocalAlert status="warning">
-          <LocalAlert.Header>
-            <LocalAlert.Title>OBS, unngå doble nedlastinger!</LocalAlert.Title>
-          </LocalAlert.Header>
-          <LocalAlert.Content>
-            <BodyLong>
-              Nav har nå begynt å sende ut oppgjørsrapporter (tidligere kalt K27
-              og T14) via vår nye Altinn 3-baserte løsning.
-            </BodyLong>
-            <BodyLong>
-              For å imøtekomme de som trenger litt tid til å tilpasse sine
-              rutiner, vil vi også{' '}
-              <b>
-                {rapportMetadata.type === 'ref-arbg'
-                  ? 'frem til 15. juni 2026'
-                  : 'ut mai 2026'}
-              </b>{' '}
-              fortsette å sende tilsvarende rapporter fra den gamle løsningen.
-            </BodyLong>
-            <BodyLong>
-              Rapportene fra ny og gammel løsning inneholder samme informasjon
-              og svarer til samme utbetaling, men vil ha forskjellig tittel i
-              Altinn-innboksen. Du trenger derfor{' '}
-              <b>kun å laste ned én av dem</b>.
-            </BodyLong>
-          </LocalAlert.Content>
-        </LocalAlert>
-      )}
-      <ExpansionCard
-        aria-label="Nedlastingsknapper for oppgjørsrapporter"
-        defaultOpen={true}
-      >
-        <ExpansionCard.Header>
+    <ExpansionCard
+      data-rapport-id={rapportMetadata.id}
+      data-color={alleredeLastetNed ? 'accent' : 'brand-beige'}
+      aria-label={`Nedlastingsknapper for oppgjørsrapport med id ${rapportMetadata.id}`}
+      open={rapportMetadata.id === valgtRapport}
+      onToggle={(open: boolean) => {
+        if (open) {
+          oppdaterValgtRapport(rapportMetadata.id);
+        } else {
+          oppdaterValgtRapport(null);
+        }
+      }}
+    >
+      <ExpansionCard.Header>
+        <HStack wrap={false} gap="space-16" align="center">
+          <FileTextIcon aria-hidden fontSize="3rem" />
           <ExpansionCard.Title>
-            {rapportTittel(rapportMetadata)}
+            <VStack>
+              {rapportTittel(rapportType, rapportMetadata)}
+              {!alleredeLastetNed && (
+                <ExpansionCard.Description>
+                  <Tag size="small" variant="outline" data-color="danger">
+                    <BellIcon aria-hidden />
+                    Ulest rapport
+                  </Tag>
+                </ExpansionCard.Description>
+              )}
+            </VStack>
           </ExpansionCard.Title>
-        </ExpansionCard.Header>
-        <ExpansionCard.Content>
-          <Innhold id={rapportMetadata.id} />
-        </ExpansionCard.Content>
-      </ExpansionCard>
-    </VStack>
+        </HStack>
+      </ExpansionCard.Header>
+      <ExpansionCard.Content>
+        <Innhold rapportMetadata={rapportMetadata} />
+      </ExpansionCard.Content>
+    </ExpansionCard>
   );
 }
 
 interface InnholdProps {
-  id: number;
+  rapportMetadata: RapportMetadata;
 }
 
-function Innhold({ id }: InnholdProps) {
+function Innhold({ rapportMetadata }: InnholdProps) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<'pdf' | 'csv' | null>(null);
 
-  const hentRapport = async (type: 'pdf' | 'csv') => {
+  const hentRapport = async (variant: VariantMedNedlastingsinfo) => {
     setError(null);
-    setIsLoading(type);
+    setIsLoading(variant.format);
 
     try {
-      const url = `/oppgjorsrapporter/rapport/${id}/innhold?type=${type}`;
+      const url = `/oppgjorsrapporter/rapport/${rapportMetadata.id}/innhold?type=${variant.format}`;
       const response = await fetch(url);
 
       if (!response.ok) {
         setError(
-          `Noe gikk galt ved nedlasting av ${type.toUpperCase()}-rapporten.`,
+          `Noe gikk galt ved nedlasting av ${variant.format.toUpperCase()}-rapporten.`,
         );
         return;
       }
 
       const blob = await response.blob();
-      let filename = `oppgjorsrapport_${id}.${type}`;
+      let filename = variant.filnavn;
       const cdValue = response.headers?.get('Content-Disposition');
       if (cdValue) {
         const filenameMatch =
@@ -168,18 +173,31 @@ function Innhold({ id }: InnholdProps) {
           </ErrorSummary>
         )}
         <HStack gap="space-32" justify="center">
-          {(['pdf', 'csv'] as const).map((format) => (
-            <Button
-              key={format}
-              variant="primary"
-              size="medium"
-              onClick={() => hentRapport(format)}
-              icon={<DownloadIcon aria-hidden />}
-              iconPosition="right"
-              loading={isLoading === format}
+          {rapportMetadata.varianterMedNedlastingsinfo.map((variant) => (
+            <VStack
+              key={`${rapportMetadata.id}-${variant.format}`}
+              gap="space-8"
+              align="center"
             >
-              Last ned {format.toUpperCase()}
-            </Button>
+              <Button
+                variant="primary"
+                size="medium"
+                onClick={() => hentRapport(variant)}
+                icon={<DownloadIcon aria-hidden />}
+                iconPosition="right"
+                loading={isLoading === variant.format}
+              >
+                Last ned {variant.format.toUpperCase()}
+              </Button>
+              {variant.nedlastingsinfo != null && (
+                <BodyShort size="small">
+                  Sist lastet ned &nbsp;
+                  {isoDateTimeTilNorskDatoMedKlokkeslett(
+                    variant.nedlastingsinfo?.sistLastetNed,
+                  )}
+                </BodyShort>
+              )}
+            </VStack>
           ))}
         </HStack>
       </VStack>

@@ -1,0 +1,62 @@
+{
+  "forespurtRapportId": 2,
+  "orgnr": "111222333",
+  "orgNavn": "Test Org",
+  "type": "ref-arbg",
+  "rapporter": [
+    {
+      "id": 3,
+      "datoValutert": "2026-03-31",
+      "varianterMedNedlastingsinfo": [
+        {
+          "format": "pdf",
+          "filnavn": "111222333_ref-arbg_2026-03-31.pdf",
+          "nedlastingsinfo": {
+            "sistLastetNed": "2026-04-03T11:00:00Z",
+            "sistLastetNedAv": "systembruker"
+          }
+        },
+        {
+          "format": "csv",
+          "filnavn": "111222333_ref-arbg_2026-03-31.csv",
+          "nedlastingsinfo": null
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "datoValutert": "2026-02-28",
+      "varianterMedNedlastingsinfo": [
+        {
+          "format": "pdf",
+          "filnavn": "111222333_ref-arbg_2026-02-28.pdf",
+          "nedlastingsinfo": {
+            "sistLastetNed": "2026-03-01T10:00:00Z",
+            "sistLastetNedAv": "tokenx"
+          }
+        },
+        {
+          "format": "csv",
+          "filnavn": "111222333_ref-arbg_2026-02-28.csv",
+          "nedlastingsinfo": null
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "datoValutert": "2026-01-31",
+      "varianterMedNedlastingsinfo": [
+        {
+          "format": "pdf",
+          "filnavn": "111222333_ref-arbg_2026-01-31.pdf",
+          "nedlastingsinfo": null
+        },
+        {
+          "format": "csv",
+          "filnavn": "111222333_ref-arbg_2026-01-31.csv",
+          "nedlastingsinfo": null
+        }
+      ]
+    }
+  ]
+}
