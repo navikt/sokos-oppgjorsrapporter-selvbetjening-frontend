@@ -1,0 +1,33 @@
+[
+  {
+    "tilgang": "nav_utbetaling_oppgjorsrapport-refusjon-arbeidsgiver",
+    "virksomheter": [
+      {
+        "orgnr": "987654321",
+        "navn": "Ridabu og Malmefjord regnskap AS",
+        "underenheter": [
+          {
+            "orgnr": "123456789",
+            "navn": "Ridabu rekneskap AS",
+            "underenheter": []
+          },
+          {
+            "orgnr": "234567890",
+            "navn": "Malmefjord rekneskap AS",
+            "underenheter": []
+          }
+        ]
+      },
+      {
+        "orgnr": "997654321",
+        "navn": "Dalen og Heia økonomi",
+        "underenheter": []
+      },
+      {
+        "orgnr": "997754321",
+        "navn": "Indreflytten idrettslag",
+        "underenheter": []
+      }
+    ]
+  }
+]

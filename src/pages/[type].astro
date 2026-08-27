@@ -1,0 +1,63 @@
+---
+import { actions } from 'astro:actions';
+import Layout from '@src/layouts/Layout.astro';
+import { RapportType } from '@src/schemas/types.ts';
+import { Virksomhetsliste } from '@src/components/Virksomhetsliste.tsx';
+import { DekoratorContext } from '@src/components/DekoratorContext';
+import { VStack } from '@navikt/ds-react';
+import { AdministrerTilganger } from '@src/components/AdministrerTilganger.tsx';
+const { type } = Astro.params;
+
+const parsetRapportType = RapportType.safeParse(type);
+if (!parsetRapportType.success) {
+  return new Response(null, { status: 404, statusText: 'Not Found' });
+}
+const rapportType = parsetRapportType.data;
+
+const response = await (async () => {
+  const { data, error } = await Astro.callAction(
+    actions.hentOrganisasjoner,
+    {},
+  );
+
+  return {
+    error: error?.message ?? '',
+    data: data ?? null,
+  };
+})();
+---
+
+<Layout>
+  <DekoratorContext
+    rapportType={rapportType}
+    smuler={[
+      {
+        url: `/oppgjorsrapporter/${rapportType}`,
+        title: 'Velg organisasjonsenhet',
+      },
+    ]}
+    client:load
+  />
+  {
+    !response.data ||
+      (response.data.length == 0 && (
+        <VStack>
+          <h1>Du har ikke tilgang til noen virksomheter</h1>
+        </VStack>
+      ))
+  }
+  {
+    response.data && response.data.length > 0 && (
+      <VStack gap="space-24">
+        <h1>Velg organisasjonsenhet</h1>
+        <h2>Organisasjonsenheter du har tilgang til for refusjoner: </h2>
+        <Virksomhetsliste
+          rapportType={rapportType}
+          tilgangTilVirksomheter={response.data}
+          client:load
+        />
+        <AdministrerTilganger client:load />
+      </VStack>
+    )
+  }
+</Layout>
