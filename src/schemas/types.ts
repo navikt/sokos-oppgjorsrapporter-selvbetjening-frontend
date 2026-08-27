@@ -51,3 +51,21 @@ export const RapportMedNedlastingsinfo = z.object({
 export type RapportMedNedlastingsinfo = z.infer<
   typeof RapportMedNedlastingsinfo
 >;
+
+// -- for å unngå sirkulær referanse i zod-skjema for underenheter, må dette gjøres på en litt annen måte
+export type Virksomhet = {
+  orgnr: string;
+  navn: string;
+  underenheter: Virksomhet[];
+};
+export const Virksomhet: z.ZodType<Virksomhet> = z.object({
+  orgnr: z.string(),
+  navn: z.string(),
+  underenheter: z.lazy(() => z.array(Virksomhet)),
+});
+
+export const TilgangTilVirksomheter = z.object({
+  tilgang: z.string(),
+  virksomheter: z.array(Virksomhet),
+});
+export type TilgangTilVirksomheter = z.infer<typeof TilgangTilVirksomheter>;
