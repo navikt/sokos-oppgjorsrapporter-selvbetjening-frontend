@@ -39,7 +39,7 @@ export const Virksomhetsliste = ({
   );
 
   return (
-    <VStack gap="space-16">
+    <VStack gap="space-8">
       <form
         role="search"
         onSubmit={(e) => {

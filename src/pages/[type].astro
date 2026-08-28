@@ -3,8 +3,7 @@ import { actions } from 'astro:actions';
 import Layout from '@src/layouts/Layout.astro';
 import { RapportType } from '@src/schemas/types.ts';
 import { Virksomhetsliste } from '@src/components/Virksomhetsliste.tsx';
-import { DekoratorContext } from '@src/components/DekoratorContext';
-import { VStack } from '@navikt/ds-react';
+import { Heading } from '@navikt/ds-react';
 import { AdministrerTilganger } from '@src/components/AdministrerTilganger.tsx';
 const { type } = Astro.params;
 
@@ -27,37 +26,38 @@ const response = await (async () => {
 })();
 ---
 
-<Layout>
-  <DekoratorContext
-    rapportType={rapportType}
-    smuler={[
-      {
-        url: `/oppgjorsrapporter/${rapportType}`,
-        title: 'Velg organisasjonsenhet',
-      },
-    ]}
-    client:load
-  />
+<Layout
+  title="Velg organisasjonsenhet"
+  error={response.error}
+  rapportType={rapportType}
+  smuler={[
+    {
+      url: `/oppgjorsrapporter/${rapportType}`,
+      title: 'Velg organisasjonsenhet',
+    },
+  ]}
+>
   {
     !response.data ||
       (response.data.length == 0 && (
-        <VStack>
-          <h1>Du har ikke tilgang til noen virksomheter</h1>
-        </VStack>
+        <Heading size="medium" level="2">
+          Du har ikke tilgang til noen virksomheter
+        </Heading>
       ))
   }
   {
     response.data && response.data.length > 0 && (
-      <VStack gap="space-24">
-        <h1>Velg organisasjonsenhet</h1>
-        <h2>Organisasjonsenheter du har tilgang til for refusjoner: </h2>
+      <>
+        <Heading size="medium" level="2">
+          Organisasjonsenheter du har tilgang til for refusjoner:
+        </Heading>
         <Virksomhetsliste
           rapportType={rapportType}
           tilgangTilVirksomheter={response.data}
           client:load
         />
         <AdministrerTilganger client:load />
-      </VStack>
+      </>
     )
   }
 </Layout>

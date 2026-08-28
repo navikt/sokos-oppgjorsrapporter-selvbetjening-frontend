@@ -1,7 +1,6 @@
 ---
 import { RapportType } from '@src/schemas/types.ts';
 import Layout from '@src/layouts/Layout.astro';
-import { DekoratorContext } from '@src/components/DekoratorContext.tsx';
 const { type, orgnr } = Astro.params;
 
 const parsetRapportType = RapportType.safeParse(type);
@@ -11,20 +10,18 @@ if (!parsetRapportType.success) {
 const rapportType = parsetRapportType.data;
 ---
 
-<Layout>
-  <DekoratorContext
-    rapportType={rapportType}
-    smuler={[
-      {
-        url: `/oppgjorsrapporter/${rapportType}`,
-        title: 'Velg organisasjonsenhet',
-      },
-      {
-        url: `/oppgjorsrapporter/${rapportType}/${orgnr}`,
-        title: `${orgnr}`,
-      },
-    ]}
-    client:load
-  />
+<Layout
+  rapportType={rapportType}
+  smuler={[
+    {
+      url: `/oppgjorsrapporter/${rapportType}`,
+      title: 'Velg organisasjonsenhet',
+    },
+    {
+      url: `/oppgjorsrapporter/${rapportType}/${orgnr}`,
+      title: `${orgnr}`,
+    },
+  ]}
+>
   <h1>{type} for {orgnr}</h1>
 </Layout>
