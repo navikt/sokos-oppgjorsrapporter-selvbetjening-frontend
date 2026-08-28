@@ -37,6 +37,7 @@ export type VariantMedNedlastingsinfo = z.infer<
 export const RapportMetadata = z.object({
   id: RapportId,
   datoValutert: z.string(),
+  belop: z.string().nullish(),
   varianterMedNedlastingsinfo: z.array(VariantMedNedlastingsinfo),
 });
 export type RapportMetadata = z.infer<typeof RapportMetadata>;

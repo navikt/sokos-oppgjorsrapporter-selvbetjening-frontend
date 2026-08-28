@@ -7,6 +7,7 @@
     {
       "id": 3,
       "datoValutert": "2026-03-31",
+      "belop": "123.45",
       "varianterMedNedlastingsinfo": [
         {
           "format": "pdf",
@@ -26,6 +27,7 @@
     {
       "id": 2,
       "datoValutert": "2026-02-28",
+      "belop": "1000.00",
       "varianterMedNedlastingsinfo": [
         {
           "format": "pdf",
@@ -45,6 +47,7 @@
     {
       "id": 1,
       "datoValutert": "2026-01-31",
+      "belop": "745.20",
       "varianterMedNedlastingsinfo": [
         {
           "format": "pdf",

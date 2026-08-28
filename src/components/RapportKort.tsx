@@ -23,6 +23,7 @@ import {
   isoDateTimeTilNorskDatoMedKlokkeslett,
   isoDatoTilNorskDato,
 } from '@utils/dato-utils.ts';
+import { formatterBeloep } from '@utils/belop-utils.ts';
 
 interface RapportCardProps {
   rapportMetadata: RapportMetadata;
@@ -31,17 +32,14 @@ interface RapportCardProps {
   oppdaterValgtRapport: (rapportId: RapportId | null) => void;
 }
 
-function rapportTittel(
-  rapportType: RapportType,
-  rapport: RapportMetadata,
-): string {
+function rapportTittel(rapportType: RapportType): string {
   switch (rapportType) {
     case REPORT_TYPE_REF_ARBG:
-      return `Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt ${isoDatoTilNorskDato(rapport.datoValutert)}`;
+      return 'Oppgjørsrapport arbeidsgiver – refusjoner fra Nav';
     case REPORT_TYPE_TREKK_HEND:
-      return 'Trekkhendelser - tilbakemelding fra Nav'; // TODO: Dato eller annen rapport-id?
+      return 'Trekkhendelser - tilbakemelding fra Nav';
     case REPORT_TYPE_TREKK_KRED:
-      return 'Trekkoppgjør fra Nav'; // TODO: Dato eller annen rapport-id?
+      return 'Trekkoppgjør fra Nav';
   }
 }
 
@@ -92,17 +90,28 @@ export default function RapportKort({
         <HStack wrap={false} gap="space-16" align="center">
           <FileTextIcon aria-hidden fontSize="3rem" />
           <ExpansionCard.Title>
-            <VStack>
-              {rapportTittel(rapportType, rapportMetadata)}
-              {!alleredeLastetNed && (
-                <ExpansionCard.Description>
+            {rapportTittel(rapportType)}
+            <ExpansionCard.Description>
+              <HStack gap="space-8">
+                {!!rapportMetadata.belop && (
+                  <span>
+                    Totalbeløp {formatterBeloep(rapportMetadata.belop)}.
+                  </span>
+                )}
+                <span>
+                  {rapportType === REPORT_TYPE_TREKK_HEND
+                    ? 'Fremkjørt'
+                    : 'Utbetalt'}{' '}
+                  dato: {isoDatoTilNorskDato(rapportMetadata.datoValutert)}.
+                </span>
+                {!alleredeLastetNed && (
                   <Tag size="small" variant="outline" data-color="danger">
                     <BellIcon aria-hidden />
                     Ulest rapport
                   </Tag>
-                </ExpansionCard.Description>
-              )}
-            </VStack>
+                )}
+              </HStack>
+            </ExpansionCard.Description>
           </ExpansionCard.Title>
         </HStack>
       </ExpansionCard.Header>
