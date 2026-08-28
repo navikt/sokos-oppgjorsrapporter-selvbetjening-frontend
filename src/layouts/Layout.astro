@@ -2,19 +2,50 @@
 import { fetchDecoratorReact } from '@navikt/nav-dekoratoren-moduler/ssr';
 import { getEnvironment } from '../utils/server/environment';
 import { text } from '../language/text';
-import { baseUrl } from '../utils/server/urls';
 import styles from './Layout.module.css';
+import type { RapportType } from '@src/schemas/types.ts';
+import { Heading, VStack } from '@navikt/ds-react';
+import { ErrorSummary } from '@navikt/ds-react/ErrorSummary';
+
+interface Props {
+  title?: string;
+  rapportType?: RapportType;
+  smuler?: DecoratorBreadcrumb[];
+  error?: string;
+}
+const { title = text.title, error, rapportType, smuler = [] } = Astro.props;
+const context =
+  rapportType === 'ref-arbg' ? 'arbeidsgiver' : 'samarbeidspartner';
+type DecoratorBreadcrumb = {
+  url: string;
+  title: string;
+  analyticsTitle?: string;
+  handleInApp?: boolean;
+};
+
+const rotSmulerArbeidsgiver: DecoratorBreadcrumb[] = [
+  {
+    url: '/min-side-arbeidsgiver',
+    title: 'Min side - arbeidsgiver',
+  },
+];
+const rotSmulerSamarbeidspartner: DecoratorBreadcrumb[] = [
+  {
+    url: '/samarbeidspartner',
+    title: 'Samarbeidspartner',
+  },
+];
+
+const brodSmuler =
+  context === 'arbeidsgiver'
+    ? [...rotSmulerArbeidsgiver, ...smuler]
+    : [...rotSmulerSamarbeidspartner, ...smuler];
 
 const Decorator = await fetchDecoratorReact({
   env: getEnvironment(),
   params: {
-    context: 'arbeidsgiver',
-    breadcrumbs: [
-      {
-        title: text.title,
-        url: baseUrl,
-      },
-    ],
+    context: rapportType === 'ref-arbg' ? 'arbeidsgiver' : 'samarbeidspartner',
+    breadcrumbs: brodSmuler,
     availableLanguages: [],
   },
 });
@@ -27,7 +58,7 @@ const Decorator = await fetchDecoratorReact({
     <meta name="description" content="Astro description" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>{text.title}</title>
+    <title>{title}</title>
     <link
       rel="preload"
       href="https://cdn.nav.no/aksel/@navikt/ds-css/8.7.0/index.min.css"
@@ -42,7 +73,19 @@ const Decorator = await fetchDecoratorReact({
   <body>
     <Decorator.Header />
     <main id="maincontent" class={styles.container} role="main" tabindex="-1">
-      <slot />
+      <VStack gap="space-32">
+        <div>
+          <Heading size="large" level="1">{title}</Heading>
+        </div>
+        {
+          error && (
+            <ErrorSummary heading="Det oppstod en feil">
+              <ErrorSummary.Item>{error}</ErrorSummary.Item>
+            </ErrorSummary>
+          )
+        }
+        {!error && <slot />}
+      </VStack>
     </main>
     <Decorator.Footer />
     <Decorator.Scripts />

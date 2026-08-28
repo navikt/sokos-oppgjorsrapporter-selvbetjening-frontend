@@ -1,7 +1,5 @@
 ---
-import { ErrorSummary } from '@navikt/ds-react/ErrorSummary';
 import { actions } from 'astro:actions';
-import { Heading, VStack } from '@navikt/ds-react';
 import Layout from '@src/layouts/Layout.astro';
 import { text } from '@src/language/text.ts';
 import Rapportliste from '@src/components/Rapportliste';
@@ -26,22 +24,20 @@ const response = await (async () => {
 })();
 ---
 
-<Layout>
-  <VStack gap="space-32">
-    <div>
-      <Heading size="large" level="1">{text.title}</Heading>
-    </div>
+<Layout
+  title={text.title}
+  rapportType={response.data?.type}
+  error={response.error}
+  smuler={[
     {
-      response.error && (
-        <ErrorSummary heading="Det oppstod en feil">
-          <ErrorSummary.Item>{response.error}</ErrorSummary.Item>
-        </ErrorSummary>
-      )
-    }
-    {
-      !response.error && response.data && (
-        <Rapportliste rapportliste={response.data} client:load />
-      )
-    }
-  </VStack>
+      url: `/oppgjorsrapporter/rapport/${rapportId}`,
+      title: text.title,
+    },
+  ]}
+>
+  {
+    !response.error && response.data && (
+      <Rapportliste rapportliste={response.data} client:load />
+    )
+  }
 </Layout>
