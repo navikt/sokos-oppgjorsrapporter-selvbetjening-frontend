@@ -33,9 +33,11 @@ Tokenet kan genereres på https://github.com/settings/tokens. For mer info se: h
 
 Under finnes (syntetiske) fnr man kan bruke for å teste mot gitte URLer i dev:
 
-| URL                                                                       | fnr         | Kommentar       |
-|---------------------------------------------------------------------------|-------------|-----------------|
-| [Rapport](https://www.ekstern.dev.nav.no/oppgjorsrapporter/rapport/57309) | 10926899126 | Skal ha tilgang |
+| URL                                                                           | fnr         | Kommentar       |
+|-------------------------------------------------------------------------------|-------------|-----------------|
+| [ref-arbg](https://www.ekstern.dev.nav.no/oppgjorsrapporter/rapport/57309)    | 10926899126 | Skal ha tilgang |
+| [trekk-hend](https://www.ekstern.dev.nav.no/oppgjorsrapporter/rapport/95597)  | 10926899126 | Skal ha tilgang |
+| [trekk-kred](https://www.ekstern.dev.nav.no/oppgjorsrapporter/rapport/107293) | 10926899126 | Skal ha tilgang |
 
 # Henvendelser
 
