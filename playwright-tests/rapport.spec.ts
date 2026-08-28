@@ -36,11 +36,13 @@ test('forespurt rapport er ekspandert', async ({ page, baseURL }) => {
   await page.goto(`${baseURL}/rapport/1`);
 
   const rapportTittel = page.getByText(
-    'Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt 31.01.2026',
+    'Oppgjørsrapport arbeidsgiver – refusjoner fra Nav',
   );
+  const utbetalt = page.getByText('Utbetalt dato: 31.01.2026');
   const rapportHeader = page
     .locator('div.aksel-expansioncard__header')
-    .filter({ has: rapportTittel });
+    .filter({ has: rapportTittel })
+    .filter({ has: utbetalt });
   const ekspandert = await rapportHeader.getAttribute('data-open');
 
   expect(ekspandert).toEqual('true');
@@ -60,12 +62,17 @@ test('forespurt rapport er fargekodet riktig dersom den ikke er lastet ned', asy
   await page.goto(`${baseURL}/rapport/1`);
 
   const rapportTittel = page.getByText(
-    'Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt 31.01.2026',
+    'Oppgjørsrapport arbeidsgiver – refusjoner fra Nav',
   );
-  const rapportKort = page.locator('section').filter({ has: rapportTittel });
+  const utbetalt = page.getByText('Utbetalt dato: 31.01.2026');
+  const ulest = page.getByText('Ulest rapport');
+  const rapportKort = page
+    .locator('section')
+    .filter({ has: rapportTittel })
+    .filter({ has: utbetalt })
+    .filter({ has: ulest });
 
   const farge = await rapportKort.getAttribute('data-color');
-
   expect(farge).toEqual('brand-beige');
 });
 
@@ -76,8 +83,12 @@ test('forespurt rapport er synlig (skrollet til)', async ({
   await page.goto(`${baseURL}/rapport/1`);
 
   const rapportTittel = page.getByText(
-    'Oppgjørsrapport arbeidsgiver – refusjoner fra Nav. Utbetalt 31.01.2026',
+    'Oppgjørsrapport arbeidsgiver – refusjoner fra Nav',
   );
-  const rapportKort = page.locator('section').filter({ has: rapportTittel });
+  const utbetalt = page.getByText('Utbetalt dato: 31.01.2026');
+  const rapportKort = page
+    .locator('section')
+    .filter({ has: rapportTittel })
+    .filter({ has: utbetalt });
   await expect(rapportKort).toBeInViewport();
 });
