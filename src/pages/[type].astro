@@ -5,6 +5,7 @@ import { RapportType } from '@src/schemas/types.ts';
 import { Virksomhetsliste } from '@src/components/Virksomhetsliste.tsx';
 import { Heading } from '@navikt/ds-react';
 import { AdministrerTilganger } from '@src/components/AdministrerTilganger.tsx';
+import { VirksomhetslisteHeader } from '@src/components/VirksomhetslisteHeader';
 const { type } = Astro.params;
 
 const parsetRapportType = RapportType.safeParse(type);
@@ -57,9 +58,7 @@ const virksomheter =
   {
     virksomheter.length > 0 && (
       <>
-        <Heading size="medium" level="2">
-          Organisasjonsenheter du har tilgang til for refusjoner:
-        </Heading>
+        <VirksomhetslisteHeader rapportType={rapportType} client:load />
         <Virksomhetsliste
           rapportType={rapportType}
           virksomheter={virksomheter}
