@@ -1,25 +1,17 @@
-import {
-  type RapportType,
-  type TilgangTilVirksomheter,
-} from '@src/schemas/types.ts';
+import { type RapportType, type Virksomhet } from '@src/schemas/types.ts';
 import { Search, VStack } from '@navikt/ds-react';
 import { VirksomhetKort } from '@src/components/VirksomhetKort.tsx';
 import { useMemo, useState } from 'react';
 
 interface VirksomhetslisteProps {
   rapportType: RapportType;
-  tilgangTilVirksomheter: TilgangTilVirksomheter[];
+  virksomheter: Virksomhet[];
 }
 
 export const Virksomhetsliste = ({
   rapportType,
-  tilgangTilVirksomheter,
+  virksomheter,
 }: VirksomhetslisteProps) => {
-  const virksomheter = tilgangTilVirksomheter.find(
-    (tilgangTilVirksomhet) =>
-      tilgangTilVirksomhet.tilgang === rapportTypeTilTilgang[rapportType],
-  )?.virksomheter;
-
   const [filter, setFilter] = useState<string>('');
   const filtrerteOrganisasjoner = useMemo(
     () =>
@@ -66,10 +58,4 @@ export const Virksomhetsliste = ({
         })}
     </VStack>
   );
-};
-
-const rapportTypeTilTilgang = {
-  'ref-arbg': 'nav_utbetaling_oppgjorsrapport-refusjon-arbeidsgiver',
-  'trekk-kred': 'nav_utbetaling_oppgjorsrapport-trekkhendelser',
-  'trekk-hend': 'nav_utbetaling_oppgjorsrapport-trekkoppgjor',
 };

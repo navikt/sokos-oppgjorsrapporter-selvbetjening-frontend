@@ -24,6 +24,16 @@ const response = await (async () => {
     data: data ?? null,
   };
 })();
+
+const rapportTypeTilTilgang = {
+  'ref-arbg': 'nav_utbetaling_oppgjorsrapport-refusjon-arbeidsgiver',
+  'trekk-kred': 'nav_utbetaling_oppgjorsrapport-trekkhendelser',
+  'trekk-hend': 'nav_utbetaling_oppgjorsrapport-trekkoppgjor',
+};
+const tilganger = response.data ?? [];
+const virksomheter =
+  tilganger.find((t) => t.tilgang === rapportTypeTilTilgang[rapportType])
+    ?.virksomheter ?? [];
 ---
 
 <Layout
@@ -38,22 +48,21 @@ const response = await (async () => {
   ]}
 >
   {
-    !response.data ||
-      (response.data.length == 0 && (
-        <Heading size="medium" level="2">
-          Du har ikke tilgang til noen virksomheter
-        </Heading>
-      ))
+    virksomheter.length == 0 && (
+      <Heading size="medium" level="2">
+        Du har ikke tilgang til noen virksomheter
+      </Heading>
+    )
   }
   {
-    response.data && response.data.length > 0 && (
+    virksomheter.length > 0 && (
       <>
         <Heading size="medium" level="2">
           Organisasjonsenheter du har tilgang til for refusjoner:
         </Heading>
         <Virksomhetsliste
           rapportType={rapportType}
-          tilgangTilVirksomheter={response.data}
+          virksomheter={virksomheter}
           client:load
         />
         <AdministrerTilganger client:load />
