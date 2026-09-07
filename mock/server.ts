@@ -19,6 +19,14 @@ api.get('/api/rapport/v1/organisasjoner', (c) => {
   return c.json(organisasjoner);
 });
 
+api.get('/api/rapport/v1/organisasjoner/:orgnr', (c) => {
+  return c.json({
+    ...example,
+    forespurtRapportId: 0,
+    orgnr: c.req.param('orgnr'),
+  });
+});
+
 api.get('/api/rapport/v1/:rapportId/utvidet', (c) => {
   return c.json({
     ...example,

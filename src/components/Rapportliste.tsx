@@ -1,9 +1,10 @@
 import { type RapportId, RapportMedNedlastingsinfo } from '@src/schemas/types';
 import { text } from '@src/language/text';
 import RapportKort from '@src/components/RapportKort';
-import { BodyLong, Heading, VStack } from '@navikt/ds-react';
+import { BodyLong, Heading, Link, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { setParams } from '@navikt/nav-dekoratoren-moduler';
+import ArrowLeft from 'node_modules/@navikt/aksel-icons/dist/react/esm/ArrowLeft';
 
 interface RapportlisteProps {
   rapportliste: RapportMedNedlastingsinfo;
@@ -22,6 +23,10 @@ export default function Rapportliste({ rapportliste }: RapportlisteProps) {
 
   return (
     <VStack gap="space-32">
+      <Link href={`/oppgjorsrapporter/${rapportliste.type}`}>
+        <ArrowLeft aria-hidden />
+        Tilbake til dine organisjasjoner
+      </Link>
       <VStack>
         <Heading size="medium" level="2">
           {rapportliste.orgNavn}

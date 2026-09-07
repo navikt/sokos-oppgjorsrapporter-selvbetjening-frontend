@@ -56,6 +56,31 @@ export const server = {
       }
     },
   }),
+  hentRapporterForVirksomhet: defineAction({
+    input: z.object({
+      orgnr: z.string(),
+    }),
+    handler: async ({ orgnr }, context) => {
+      const citizenToken = context.locals.token;
+
+      if (!citizenToken) {
+        throw new ActionError({
+          code: 'UNAUTHORIZED',
+          message: 'Mangler borger token',
+        });
+      }
+
+      try {
+        return await fetchRapporterForVirksomhet(orgnr, citizenToken);
+      } catch (error: any) {
+        logger.warn(error, `Feil ved henting av rapporter for orgnr=${orgnr}`);
+        throw new ActionError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: `Feil ved henting av rapporter for orgnr=${orgnr}`,
+        });
+      }
+    },
+  }),
 };
 
 const fetchOrganisasjoner = async (
@@ -63,6 +88,15 @@ const fetchOrganisasjoner = async (
 ): Promise<TilgangTilVirksomheter[] | null> => {
   const url = `${oppgjorsrapporterApiUrl}/organisasjoner`;
   logger.info(`Forsøker henting av organisasjoner fra ${url}`);
+  return await fetchFraBackend(url, citizenToken);
+};
+
+const fetchRapporterForVirksomhet = async (
+  orgnr: string,
+  citizenToken: string,
+): Promise<RapportMedNedlastingsinfo> => {
+  const url = `${oppgjorsrapporterApiUrl}/organisasjoner/${orgnr}`;
+  logger.info(`Forsøker henting av rapporter for orgnr=${orgnr} fra ${url}`);
   return await fetchFraBackend(url, citizenToken);
 };
 

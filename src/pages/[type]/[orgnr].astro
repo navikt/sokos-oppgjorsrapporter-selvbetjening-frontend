@@ -1,6 +1,8 @@
 ---
 import { RapportType } from '@src/schemas/types.ts';
 import Layout from '@src/layouts/Layout.astro';
+import { actions } from 'astro:actions';
+import Rapportliste from '@src/components/Rapportliste.tsx';
 const { type, orgnr } = Astro.params;
 
 const parsetRapportType = RapportType.safeParse(type);
@@ -8,6 +10,24 @@ if (!parsetRapportType.success) {
   return new Response(null, { status: 404, statusText: 'Not Found' });
 }
 const rapportType = parsetRapportType.data;
+
+const response = await (async () => {
+  if (!orgnr) {
+    return { error: 'manglende orgnr', data: null };
+  }
+
+  const { data, error } = await Astro.callAction(
+    actions.hentRapporterForVirksomhet,
+    {
+      orgnr,
+    },
+  );
+
+  return {
+    error: error?.message ?? '',
+    data: data ?? null,
+  };
+})();
 ---
 
 <Layout
@@ -22,6 +42,11 @@ const rapportType = parsetRapportType.data;
       title: `${orgnr}`,
     },
   ]}
+  title=""
 >
-  <h1>{type} for {orgnr}</h1>
+  {
+    !response.error && response.data && (
+      <Rapportliste rapportliste={response.data} client:load />
+    )
+  }
 </Layout>
