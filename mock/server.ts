@@ -15,7 +15,7 @@ api.use(
   }),
 );
 
-api.get('/api/rapport/v1/organisasjoner', (c) => {
+api.get('/api/organisasjoner', (c) => {
   return c.json(organisasjoner);
 });
 
