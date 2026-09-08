@@ -4,7 +4,10 @@ import {
   RapportMedNedlastingsinfo,
   type TilgangTilVirksomheter,
 } from '@src/schemas/types.ts';
-import { oppgjorsrapporterApiUrl } from '@utils/server/urls.ts';
+import {
+  oppgjorsrapporterApiUrl,
+  organisasjonerApiUrl,
+} from '@utils/server/urls.ts';
 import logger from '@utils/logger.ts';
 import { exchangeCitizenToken } from '@utils/server/token.ts';
 
@@ -86,7 +89,7 @@ export const server = {
 const fetchOrganisasjoner = async (
   citizenToken: string,
 ): Promise<TilgangTilVirksomheter[] | null> => {
-  const url = `${oppgjorsrapporterApiUrl}/organisasjoner`;
+  const url = `${organisasjonerApiUrl}`;
   logger.info(`Forsøker henting av organisasjoner fra ${url}`);
   return await fetchFraBackend(url, citizenToken);
 };
