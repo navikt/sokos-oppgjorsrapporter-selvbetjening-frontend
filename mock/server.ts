@@ -22,7 +22,6 @@ api.get('/api/organisasjoner', (c) => {
 api.post('/api/ekstern/v1', async (c) => {
   const body = await c.req.json();
   const orgnr = body['orgnr'];
-  console.log(orgnr);
   return c.json({
     ...example,
     forespurtRapportId: 0,

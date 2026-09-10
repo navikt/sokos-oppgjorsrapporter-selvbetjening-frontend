@@ -145,6 +145,7 @@ const fetchFraBackend = async (
     headers: {
       Accept: 'application/json',
       Authorization: `Bearer ${tokenXToken}`,
+      ...(body && { 'Content-Type': 'application/json' }),
     },
     ...(body && { body: JSON.stringify(body) }),
   });
