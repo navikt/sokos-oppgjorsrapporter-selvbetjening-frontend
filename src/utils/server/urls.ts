@@ -23,6 +23,12 @@ const OPPGJORSRAPPORTER_API_URL: EnvUrl = {
   production: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/rapport/v1`,
 };
 
+const EKSTERN_API_URL: EnvUrl = {
+  local: 'http://localhost:3000/api/ekstern/v1',
+  development: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/ekstern/v1`,
+  production: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/ekstern/v1`,
+};
+
 const ORGANISASJONER_API_URL: EnvUrl = {
   local: 'http://localhost:3000/api/organisasjoner',
   development: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/organisasjoner`,
@@ -38,4 +44,5 @@ const BASE_URL: EnvUrl = {
 export const oppgjorsrapporterApiUrl =
   OPPGJORSRAPPORTER_API_URL[getEnvironment()];
 export const organisasjonerApiUrl = ORGANISASJONER_API_URL[getEnvironment()];
+export const eksternApiUrl = EKSTERN_API_URL[getEnvironment()];
 export const baseUrl = BASE_URL[getEnvironment()];

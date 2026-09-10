@@ -19,11 +19,14 @@ api.get('/api/organisasjoner', (c) => {
   return c.json(organisasjoner);
 });
 
-api.get('/api/rapport/v1/organisasjoner/:orgnr', (c) => {
+api.post('/api/ekstern/v1', async (c) => {
+  const body = await c.req.json();
+  const orgnr = body['orgnr'];
+  console.log(orgnr);
   return c.json({
     ...example,
     forespurtRapportId: 0,
-    orgnr: c.req.param('orgnr'),
+    orgnr: orgnr,
   });
 });
 
