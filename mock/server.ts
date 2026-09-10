@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { cors } from 'hono/cors';
+import { HTTPException } from 'hono/http-exception';
 import example from './data/utvidet-rapport-meta-data.json';
 import organisasjoner from './data/tilgang-til-virksomheter.json';
 
@@ -22,6 +23,9 @@ api.get('/api/organisasjoner', (c) => {
 api.post('/api/ekstern/v1', async (c) => {
   const body = await c.req.json();
   const orgnr = body['orgnr'];
+
+  if (orgnr == 'error') throw new HTTPException(404, { message: 'Not found' });
+
   return c.json({
     ...example,
     forespurtRapportId: 0,
