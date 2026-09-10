@@ -2,9 +2,11 @@ import { ActionError, defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 import {
   RapportMedNedlastingsinfo,
+  RapportType,
   type TilgangTilVirksomheter,
 } from '@src/schemas/types.ts';
 import {
+  eksternApiUrl,
   oppgjorsrapporterApiUrl,
   organisasjonerApiUrl,
 } from '@utils/server/urls.ts';
@@ -62,8 +64,9 @@ export const server = {
   hentRapporterForVirksomhet: defineAction({
     input: z.object({
       orgnr: z.string(),
+      rapportType: z.string(),
     }),
-    handler: async ({ orgnr }, context) => {
+    handler: async ({ orgnr, rapportType }, context) => {
       const citizenToken = context.locals.token;
 
       if (!citizenToken) {
@@ -73,8 +76,20 @@ export const server = {
         });
       }
 
+      const type = RapportType.safeParse(rapportType);
+      if (!type.success) {
+        throw new ActionError({
+          code: 'BAD_REQUEST',
+          message: `Feil rapporttype: ${rapportType}`,
+        });
+      }
+
       try {
-        return await fetchRapporterForVirksomhet(orgnr, citizenToken);
+        return await fetchRapporterForVirksomhet(
+          orgnr,
+          type.data,
+          citizenToken,
+        );
       } catch (error: any) {
         logger.warn(error, `Feil ved henting av rapporter for orgnr=${orgnr}`);
         throw new ActionError({
@@ -91,16 +106,17 @@ const fetchOrganisasjoner = async (
 ): Promise<TilgangTilVirksomheter[] | null> => {
   const url = `${organisasjonerApiUrl}`;
   logger.info(`Forsøker henting av organisasjoner fra ${url}`);
-  return await fetchFraBackend(url, citizenToken);
+  return await getFraBackend(url, citizenToken);
 };
 
 const fetchRapporterForVirksomhet = async (
   orgnr: string,
+  rapportType: RapportType,
   citizenToken: string,
 ): Promise<RapportMedNedlastingsinfo> => {
-  const url = `${oppgjorsrapporterApiUrl}/organisasjoner/${orgnr}`;
+  const url = `${eksternApiUrl}`;
   logger.info(`Forsøker henting av rapporter for orgnr=${orgnr} fra ${url}`);
-  return await fetchFraBackend(url, citizenToken);
+  return await postTilBackend(url, citizenToken, { orgnr, rapportType });
 };
 
 const fetchRapportMedNedlastningsinfo = async (
@@ -109,17 +125,28 @@ const fetchRapportMedNedlastningsinfo = async (
 ): Promise<RapportMedNedlastingsinfo> => {
   const url = `${oppgjorsrapporterApiUrl}/${id}/utvidet`;
   logger.info(`Forsøker henting av rapport metadata for id=${id} fra ${url}`);
-  return await fetchFraBackend(url, citizenToken);
+  return await getFraBackend(url, citizenToken);
 };
 
-const fetchFraBackend = async (url: string, citizenToken: string) => {
+const getFraBackend = async (url: string, citizenToken: string) =>
+  fetchFraBackend('GET', url, citizenToken);
+const postTilBackend = async (url: string, citizenToken: string, body: any) =>
+  fetchFraBackend('POST', url, citizenToken, body);
+
+const fetchFraBackend = async (
+  method: string,
+  url: string,
+  citizenToken: string,
+  body?: any,
+) => {
   const tokenXToken = await exchangeCitizenToken(citizenToken);
   const response = await fetch(url, {
-    method: 'GET',
+    method: method,
     headers: {
       Accept: 'application/json',
       Authorization: `Bearer ${tokenXToken}`,
     },
+    ...(body && { body: JSON.stringify(body) }),
   });
 
   if (!response.ok) {
