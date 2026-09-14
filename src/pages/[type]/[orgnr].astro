@@ -3,6 +3,7 @@ import { RapportType } from '@src/schemas/types.ts';
 import Layout from '@src/layouts/Layout.astro';
 import { actions } from 'astro:actions';
 import Rapportliste from '@src/components/Rapportliste.tsx';
+import { virksomhetermedTilgangTilType } from '@utils/virksomhetTilganger.ts';
 const { type, orgnr } = Astro.params;
 
 const parsetRapportType = RapportType.safeParse(type);
@@ -23,6 +24,27 @@ const response = await (async () => {
       rapportType,
     },
   );
+
+  if (!error && data?.orgNavn === undefined) {
+    const { data: tilganger, error: organisasjonerError } =
+      await Astro.callAction(actions.hentOrganisasjoner, {
+        orgnr,
+      });
+
+    const virksomheter = virksomhetermedTilgangTilType(
+      tilganger ?? [],
+      rapportType,
+    );
+    const orgNavn = virksomheter.find((o) => o.orgnr === orgnr)?.navn;
+
+    return {
+      error: organisasjonerError?.message ?? 'Feil oppstod',
+      data: {
+        ...data,
+        orgNavn,
+      },
+    };
+  }
 
   return {
     error: error?.message ?? '',

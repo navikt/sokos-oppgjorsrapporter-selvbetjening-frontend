@@ -6,6 +6,7 @@ import { Virksomhetsliste } from '@src/components/Virksomhetsliste.tsx';
 import { Heading } from '@navikt/ds-react';
 import { AdministrerTilganger } from '@src/components/AdministrerTilganger.tsx';
 import { VirksomhetslisteHeader } from '@src/components/VirksomhetslisteHeader';
+import { virksomhetermedTilgangTilType } from '@utils/virksomhetTilganger.ts';
 const { type } = Astro.params;
 
 const parsetRapportType = RapportType.safeParse(type);
@@ -26,15 +27,8 @@ const response = await (async () => {
   };
 })();
 
-const rapportTypeTilTilgang = {
-  'ref-arbg': 'nav_utbetaling_oppgjorsrapport-refusjon-arbeidsgiver',
-  'trekk-kred': 'nav_utbetaling_oppgjorsrapport-trekkhendelser',
-  'trekk-hend': 'nav_utbetaling_oppgjorsrapport-trekkoppgjor',
-};
 const tilganger = response.data ?? [];
-const virksomheter =
-  tilganger.find((t) => t.tilgang === rapportTypeTilTilgang[rapportType])
-    ?.virksomheter ?? [];
+const virksomheter = virksomhetermedTilgangTilType(tilganger, rapportType);
 ---
 
 <Layout
