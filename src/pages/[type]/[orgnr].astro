@@ -4,6 +4,7 @@ import Layout from '@src/layouts/Layout.astro';
 import { actions } from 'astro:actions';
 import Rapportliste from '@src/components/Rapportliste.tsx';
 import { virksomhetermedTilgangTilType } from '@utils/virksomhetTilganger.ts';
+import { rapportKortform, rapportNavn } from '@src/language/text.ts';
 const { type, orgnr } = Astro.params;
 
 const parsetRapportType = RapportType.safeParse(type);
@@ -25,23 +26,27 @@ const response = await (async () => {
     },
   );
 
-  if (!error && data?.orgNavn === undefined) {
-    const { data: tilganger, error: organisasjonerError } =
-      await Astro.callAction(actions.hentOrganisasjoner, {
+  if (!error?.message && !data?.orgNavn) {
+    const { data: tilganger } = await Astro.callAction(
+      actions.hentOrganisasjoner,
+      {
         orgnr,
-      });
+      },
+    );
 
     const virksomheter = virksomhetermedTilgangTilType(
       tilganger ?? [],
       rapportType,
     );
     const orgNavn = virksomheter.find((o) => o.orgnr === orgnr)?.navn;
-
     return {
-      error: organisasjonerError?.message ?? 'Feil oppstod',
+      error: error?.message ?? '',
       data: {
-        ...data,
-        orgNavn,
+        forespurtRapportId: data?.forespurtRapportId ?? 0,
+        orgnr: orgnr,
+        orgNavn: orgNavn,
+        type: rapportType,
+        rapporter: data?.rapporter ?? [],
       },
     };
   }
@@ -62,10 +67,10 @@ const response = await (async () => {
     },
     {
       url: `/oppgjorsrapporter/${rapportType}/${orgnr}`,
-      title: `${response.data?.orgNavn ?? 'Feil oppstod'}`,
+      title: `${rapportKortform(rapportType)} ${response.data?.orgNavn ?? 'Virksomhet mangler navn'}`,
     },
   ]}
-  title={response.data?.orgNavn ?? 'Feil oppstod'}
+  title={rapportNavn(rapportType)}
   error={response.error}
 >
   {

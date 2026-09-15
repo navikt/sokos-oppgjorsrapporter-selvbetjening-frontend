@@ -23,6 +23,7 @@ import {
   isoDateTimeTilNorskDatoMedKlokkeslett,
   isoDatoTilNorskDato,
 } from '@utils/dato-utils.ts';
+import { rapportNavn } from '@src/language/text.ts';
 import { formatterBeloep } from '@utils/belop-utils.ts';
 
 interface RapportCardProps {
@@ -35,11 +36,10 @@ interface RapportCardProps {
 function rapportTittel(rapportType: RapportType): string {
   switch (rapportType) {
     case REPORT_TYPE_REF_ARBG:
-      return 'Oppgjørsrapport arbeidsgiver – refusjoner fra Nav';
+      return `${rapportNavn(rapportType)}`;
     case REPORT_TYPE_TREKK_HEND:
-      return 'Trekkhendelser - tilbakemelding fra Nav';
     case REPORT_TYPE_TREKK_KRED:
-      return 'Trekkoppgjør fra Nav';
+      return rapportNavn(rapportType);
   }
 }
 
