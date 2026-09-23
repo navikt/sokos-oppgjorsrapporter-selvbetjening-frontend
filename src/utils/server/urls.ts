@@ -30,9 +30,9 @@ const EKSTERN_API_URL: EnvUrl = {
 };
 
 const ORGANISASJONER_API_URL: EnvUrl = {
-  local: 'http://localhost:3000/api/organisasjoner',
-  development: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/organisasjoner`,
-  production: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/organisasjoner`,
+  local: 'http://localhost:3000/api/organisasjoner/v1',
+  development: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/organisasjoner/v1`,
+  production: `${process.env.SOKOS_OPPGJORSRAPPORTER_API}/api/organisasjoner/v1`,
 };
 
 const BASE_URL: EnvUrl = {
