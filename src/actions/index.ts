@@ -3,7 +3,7 @@ import { z } from 'astro:schema';
 import {
   RapportMedNedlastingsinfo,
   RapportType,
-  type TilgangTilVirksomheter,
+  type Virksomhet,
 } from '@src/schemas/types.ts';
 import {
   eksternApiUrl,
@@ -40,7 +40,10 @@ export const server = {
     },
   }),
   hentOrganisasjoner: defineAction({
-    handler: async (_, context) => {
+    input: z.object({
+      type: z.string(),
+    }),
+    handler: async ({ type }, context) => {
       const citizenToken = context.locals.token;
 
       if (!citizenToken) {
@@ -50,8 +53,16 @@ export const server = {
         });
       }
 
+      const rapportType = RapportType.safeParse(type);
+      if (!rapportType.success) {
+        throw new ActionError({
+          code: 'BAD_REQUEST',
+          message: `Feil rapporttype: ${rapportType}`,
+        });
+      }
+
       try {
-        return await fetchOrganisasjoner(citizenToken);
+        return await fetchOrganisasjoner(rapportType.data, citizenToken);
       } catch (error: any) {
         logger.warn(error, `Feil ved henting av organisasjoner`);
         throw new ActionError({
@@ -102,9 +113,10 @@ export const server = {
 };
 
 const fetchOrganisasjoner = async (
+  rapportType: RapportType,
   citizenToken: string,
-): Promise<TilgangTilVirksomheter[] | null> => {
-  const url = `${organisasjonerApiUrl}`;
+): Promise<Virksomhet[] | null> => {
+  const url = `${organisasjonerApiUrl}/${rapportType}`;
   logger.info(`Forsøker henting av organisasjoner fra ${url}`);
   return await getFraBackend(url, citizenToken);
 };

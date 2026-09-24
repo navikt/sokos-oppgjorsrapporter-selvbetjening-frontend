@@ -4,6 +4,7 @@ import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
 import example from './data/utvidet-rapport-meta-data.json';
 import organisasjoner from './data/tilgang-til-virksomheter.json';
+import type { RapportType } from '@src/schemas/types.ts';
 
 const api = new Hono();
 
@@ -16,8 +17,9 @@ api.use(
   }),
 );
 
-api.get('/api/organisasjoner/v1', (c) => {
-  return c.json(organisasjoner);
+api.get('/api/organisasjoner/v1/:rapportType', (c) => {
+  const rapportType = c.req.param('rapportType') as RapportType;
+  return c.json(organisasjoner[rapportType]);
 });
 
 api.post('/api/ekstern/v1', async (c) => {

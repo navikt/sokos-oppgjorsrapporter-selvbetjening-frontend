@@ -6,20 +6,18 @@ import { Virksomhetsliste } from '@src/components/Virksomhetsliste.tsx';
 import { Heading } from '@navikt/ds-react';
 import { AdministrerTilganger } from '@src/components/AdministrerTilganger.tsx';
 import { VirksomhetslisteHeader } from '@src/components/VirksomhetslisteHeader';
-import { virksomhetermedTilgangTilType } from '@utils/virksomhetTilganger.ts';
 const { type } = Astro.params;
 
 const parsetRapportType = RapportType.safeParse(type);
 if (!parsetRapportType.success) {
-  return new Response(null, { status: 404, statusText: 'Not Found' });
+  return Astro.redirect('https://www.nav.no/404');
 }
 const rapportType = parsetRapportType.data;
 
 const response = await (async () => {
-  const { data, error } = await Astro.callAction(
-    actions.hentOrganisasjoner,
-    {},
-  );
+  const { data, error } = await Astro.callAction(actions.hentOrganisasjoner, {
+    type: rapportType,
+  });
 
   return {
     error: error?.message ?? '',
@@ -27,8 +25,7 @@ const response = await (async () => {
   };
 })();
 
-const tilganger = response.data ?? [];
-const virksomheter = virksomhetermedTilgangTilType(tilganger, rapportType);
+const virksomheter = response.data ?? [];
 ---
 
 <Layout

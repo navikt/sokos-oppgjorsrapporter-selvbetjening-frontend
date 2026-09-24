@@ -3,13 +3,12 @@ import { RapportType } from '@src/schemas/types.ts';
 import Layout from '@src/layouts/Layout.astro';
 import { actions } from 'astro:actions';
 import Rapportliste from '@src/components/Rapportliste.tsx';
-import { virksomhetermedTilgangTilType } from '@utils/virksomhetTilganger.ts';
 import { rapportKortform, rapportNavn } from '@src/language/text.ts';
 const { type, orgnr } = Astro.params;
 
 const parsetRapportType = RapportType.safeParse(type);
 if (!parsetRapportType.success) {
-  return new Response(null, { status: 404, statusText: 'Not Found' });
+  return Astro.redirect('https://www.nav.no/404');
 }
 const rapportType = parsetRapportType.data;
 
@@ -27,18 +26,14 @@ const response = await (async () => {
   );
 
   if (!error?.message && !data?.orgNavn) {
-    const { data: tilganger } = await Astro.callAction(
+    const { data: virksomheter } = await Astro.callAction(
       actions.hentOrganisasjoner,
       {
-        orgnr,
+        type: rapportType,
       },
     );
 
-    const virksomheter = virksomhetermedTilgangTilType(
-      tilganger ?? [],
-      rapportType,
-    );
-    const orgNavn = virksomheter.find((o) => o.orgnr === orgnr)?.navn;
+    const orgNavn = virksomheter?.find((o) => o.orgnr === orgnr)?.navn;
     return {
       error: error?.message ?? '',
       data: {

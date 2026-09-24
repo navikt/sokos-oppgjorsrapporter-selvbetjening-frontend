@@ -64,9 +64,3 @@ export const Virksomhet: z.ZodType<Virksomhet> = z.object({
   navn: z.string(),
   underenheter: z.lazy(() => z.array(Virksomhet)),
 });
-
-export const TilgangTilVirksomheter = z.object({
-  tilgang: z.string(),
-  virksomheter: z.array(Virksomhet),
-});
-export type TilgangTilVirksomheter = z.infer<typeof TilgangTilVirksomheter>;
