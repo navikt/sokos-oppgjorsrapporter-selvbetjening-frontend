@@ -71,9 +71,5 @@ const response = await (async () => {
   title={rapportNavn(rapportType)}
   error={response.error}
 >
-  {
-    response.data && (
-      <Rapportliste rapportliste={response.data} client:load />
-    )
-  }
+  {response.data && <Rapportliste rapportliste={response.data} client:load />}
 </Layout>
