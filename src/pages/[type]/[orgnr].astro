@@ -1,0 +1,75 @@
+---
+import { RapportType } from '@src/schemas/types.ts';
+import Layout from '@src/layouts/Layout.astro';
+import { actions } from 'astro:actions';
+import Rapportliste from '@src/components/Rapportliste.tsx';
+import { rapportKortform, rapportNavn } from '@src/language/text.ts';
+const { type, orgnr } = Astro.params;
+
+const parsetRapportType = RapportType.safeParse(type);
+if (!parsetRapportType.success) {
+  return Astro.redirect('https://www.nav.no/404');
+}
+const rapportType = parsetRapportType.data;
+
+const response = await (async () => {
+  if (!orgnr) {
+    return { error: 'manglende orgnr', data: null };
+  }
+
+  const { data, error } = await Astro.callAction(
+    actions.hentRapporterForVirksomhet,
+    {
+      orgnr,
+      rapportType,
+    },
+  );
+
+  // -- Vi henter organisasjonsnavn fra rapportene, men
+  // -- dersom det ikke finnes rapporter for dette orgnummeret,
+  // -- henter vi navnet fra altinn-tilganger
+  if (!error?.message && !data?.orgNavn) {
+    const { data: virksomheter } = await Astro.callAction(
+      actions.hentOrganisasjoner,
+      {
+        type: rapportType,
+      },
+    );
+
+    const orgNavn = virksomheter?.find((o) => o.orgnr === orgnr)?.navn;
+    return {
+      error: error?.message ?? '',
+      data: {
+        forespurtRapportId: data?.forespurtRapportId ?? 0,
+        orgnr: orgnr,
+        orgNavn: orgNavn,
+        type: rapportType,
+        rapporter: data?.rapporter ?? [],
+      },
+    };
+  }
+
+  return {
+    error: error?.message ?? '',
+    data: data ?? null,
+  };
+})();
+---
+
+<Layout
+  rapportType={rapportType}
+  smuler={[
+    {
+      url: `/oppgjorsrapporter/${rapportType}`,
+      title: 'Velg organisasjonsenhet',
+    },
+    {
+      url: `/oppgjorsrapporter/${rapportType}/${orgnr}`,
+      title: `${rapportKortform(rapportType)} ${response.data?.orgNavn ?? 'Virksomhet mangler navn'}`,
+    },
+  ]}
+  title={rapportNavn(rapportType)}
+  error={response.error}
+>
+  {response.data && <Rapportliste rapportliste={response.data} client:load />}
+</Layout>
