@@ -36,7 +36,7 @@ interface RapportCardProps {
 function rapportTittel(rapportType: RapportType): string {
   switch (rapportType) {
     case REPORT_TYPE_REF_ARBG:
-      return `${rapportNavn(rapportType)}`;
+      return rapportNavn(rapportType);
     case REPORT_TYPE_TREKK_HEND:
     case REPORT_TYPE_TREKK_KRED:
       return rapportNavn(rapportType);

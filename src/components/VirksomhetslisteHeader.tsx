@@ -1,4 +1,9 @@
-import type { RapportType } from '@src/schemas/types.ts';
+import {
+  type RapportType,
+  REPORT_TYPE_REF_ARBG,
+  REPORT_TYPE_TREKK_HEND,
+  REPORT_TYPE_TREKK_KRED,
+} from '@src/schemas/types.ts';
 import { Heading, Radio, RadioGroup, VStack } from '@navikt/ds-react';
 
 interface VirksomhetslisteHeaderProps {
@@ -9,10 +14,10 @@ export const VirksomhetslisteHeader = ({
   rapportType,
 }: VirksomhetslisteHeaderProps) => {
   switch (rapportType) {
-    case 'ref-arbg':
+    case REPORT_TYPE_REF_ARBG:
       return <RefusjonArbeidsgiverHeader />;
-    case 'trekk-kred':
-    case 'trekk-hend':
+    case REPORT_TYPE_TREKK_KRED:
+    case REPORT_TYPE_TREKK_HEND:
       return <TrekkinformasjonHeader rapportType={rapportType} />;
   }
 };

@@ -25,6 +25,9 @@ const response = await (async () => {
     },
   );
 
+  // -- Vi henter organisasjonsnavn fra rapportene, men
+  // -- dersom det ikke finnes rapporter for dette orgnummeret,
+  // -- henter vi navnet fra altinn-tilganger
   if (!error?.message && !data?.orgNavn) {
     const { data: virksomheter } = await Astro.callAction(
       actions.hentOrganisasjoner,
@@ -69,7 +72,7 @@ const response = await (async () => {
   error={response.error}
 >
   {
-    !response.error && response.data && (
+    response.data && (
       <Rapportliste rapportliste={response.data} client:load />
     )
   }
