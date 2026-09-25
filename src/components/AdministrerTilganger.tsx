@@ -4,7 +4,7 @@ export const AdministrerTilganger = () => {
   return (
     <LinkCard>
       <LinkCard.Title>
-        <LinkCard.Anchor href="https://www.altinn.no">
+        <LinkCard.Anchor href="https://info.altinn.no/nyheter/altinn-rollene-erstattes-av-tilgangspakker-slik-handterer-du-overgangen/">
           Administrer tilgang til organisasjoner
         </LinkCard.Anchor>
       </LinkCard.Title>
