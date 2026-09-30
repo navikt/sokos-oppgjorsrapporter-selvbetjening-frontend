@@ -1,0 +1,62 @@
+---
+import { actions } from 'astro:actions';
+import Layout from '@src/layouts/Layout.astro';
+import { RapportType } from '@src/schemas/types.ts';
+import { Virksomhetsliste } from '@src/components/Virksomhetsliste.tsx';
+import { Heading } from '@navikt/ds-react';
+import { AdministrerTilganger } from '@src/components/AdministrerTilganger.tsx';
+import { VirksomhetslisteHeader } from '@src/components/VirksomhetslisteHeader';
+const { type } = Astro.params;
+
+const parsetRapportType = RapportType.safeParse(type);
+if (!parsetRapportType.success) {
+  return Astro.redirect('https://www.nav.no/404');
+}
+const rapportType = parsetRapportType.data;
+
+const response = await (async () => {
+  const { data, error } = await Astro.callAction(actions.hentOrganisasjoner, {
+    type: rapportType,
+  });
+
+  return {
+    error: error?.message ?? '',
+    data: data ?? null,
+  };
+})();
+
+const virksomheter = response.data ?? [];
+---
+
+<Layout
+  title="Velg organisasjonsenhet"
+  error={response.error}
+  rapportType={rapportType}
+  smuler={[
+    {
+      url: `/oppgjorsrapporter/${rapportType}`,
+      title: 'Velg organisasjonsenhet',
+    },
+  ]}
+>
+  {
+    virksomheter.length == 0 && (
+      <Heading size="medium" level="2">
+        Du har ikke tilgang til noen virksomheter
+      </Heading>
+    )
+  }
+  {
+    virksomheter.length > 0 && (
+      <>
+        <VirksomhetslisteHeader rapportType={rapportType} client:load />
+        <Virksomhetsliste
+          rapportType={rapportType}
+          virksomheter={virksomheter}
+          client:load
+        />
+        <AdministrerTilganger client:load />
+      </>
+    )
+  }
+</Layout>
