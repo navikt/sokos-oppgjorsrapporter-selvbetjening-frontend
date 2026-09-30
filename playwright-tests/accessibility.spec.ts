@@ -37,8 +37,6 @@ test.describe('Axe a11y', () => {
     await page.goto('/oppgjorsrapporter/rapport/1');
     await page.waitForLoadState('networkidle');
     await page.keyboard.press('Tab');
-    await page.keyboard.press('Enter');
-    await page.keyboard.press('Tab');
     const focusedText = await page.evaluate(() =>
       document.activeElement?.textContent?.trim(),
     );
