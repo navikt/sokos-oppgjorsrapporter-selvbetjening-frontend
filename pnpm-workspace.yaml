@@ -3,3 +3,6 @@ allowBuilds:
   sharp: true
 
 minimumReleaseAge: 10080 # 7 dager
+
+minimumReleaseAgeExclude:
+  - '@navikt/nav-dekoratoren-moduler@4.5.0'
