@@ -25,7 +25,10 @@ type DecoratorBreadcrumb = {
 
 const rotSmulerArbeidsgiver: DecoratorBreadcrumb[] = [
   {
-    url: '/min-side-arbeidsgiver',
+    url:
+      getEnvironment() === 'prod'
+        ? '/min-side-arbeidsgiver'
+        : 'https://arbeidsgiver.intern.dev.nav.no/min-side-arbeidsgiver/',
     title: 'Min side - arbeidsgiver',
   },
 ];
