@@ -25,6 +25,7 @@ api.get('/api/organisasjoner/v1/:rapportType', (c) => {
 api.post('/api/ekstern/v1', async (c) => {
   const body = await c.req.json();
   const orgnr = body['orgnr'];
+  const rapportType = body['rapportType'];
 
   if (orgnr == 'error') throw new HTTPException(404, { message: 'Not found' });
 
@@ -32,6 +33,7 @@ api.post('/api/ekstern/v1', async (c) => {
     ...example,
     forespurtRapportId: 0,
     orgnr: orgnr,
+    type: rapportType,
   });
 });
 
