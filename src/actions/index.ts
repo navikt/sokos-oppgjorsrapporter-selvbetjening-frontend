@@ -5,11 +5,7 @@ import {
   RapportType,
   type Virksomhet,
 } from '@src/schemas/types.ts';
-import {
-  eksternApiUrl,
-  oppgjorsrapporterApiUrl,
-  organisasjonerApiUrl,
-} from '@utils/server/urls.ts';
+import { eksternApiUrl, organisasjonerApiUrl } from '@utils/server/urls.ts';
 import logger from '@utils/logger.ts';
 import { exchangeCitizenToken } from '@utils/server/token.ts';
 
@@ -135,7 +131,7 @@ const fetchRapportMedNedlastningsinfo = async (
   id: string | number,
   citizenToken: string,
 ): Promise<RapportMedNedlastingsinfo> => {
-  const url = `${oppgjorsrapporterApiUrl}/${id}/utvidet`;
+  const url = `${eksternApiUrl}/${id}`;
   logger.info(`Forsøker henting av rapport metadata for id=${id} fra ${url}`);
   return await getFraBackend(url, citizenToken);
 };
