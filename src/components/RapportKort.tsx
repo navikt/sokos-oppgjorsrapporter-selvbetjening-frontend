@@ -27,7 +27,7 @@ import { rapportNavn } from '@src/language/text.ts';
 import { formatterBeloep } from '@utils/belop-utils.ts';
 
 interface RapportCardProps {
-  rapportMetadata: RapportMetadata;
+  initiellRapportMetadata: RapportMetadata;
   rapportType: RapportType;
   valgtRapport: RapportId | null;
   oppdaterValgtRapport: (rapportId: RapportId | null) => void;
@@ -44,14 +44,42 @@ function rapportTittel(rapportType: RapportType): string {
 }
 
 export default function RapportKort({
-  rapportMetadata,
+  initiellRapportMetadata,
   rapportType,
   valgtRapport,
   oppdaterValgtRapport,
 }: RapportCardProps) {
+  const [rapportMetadata, setRapportMetadata] = useState(
+    initiellRapportMetadata,
+  );
   const alleredeLastetNed = rapportMetadata.varianterMedNedlastingsinfo.some(
     (variant) => !!variant.nedlastingsinfo?.sistLastetNed,
   );
+
+  const muterNedlastningsinfo = (
+    format: 'pdf' | 'csv',
+    bleLastetNed: boolean,
+  ) => {
+    if (!bleLastetNed) return;
+
+    setRapportMetadata((forrigeState) => ({
+      ...forrigeState,
+      varianterMedNedlastingsinfo: forrigeState.varianterMedNedlastingsinfo.map(
+        (forrigeVariant) => {
+          if (forrigeVariant.format === format) {
+            return {
+              ...forrigeVariant,
+              nedlastingsinfo: {
+                ...forrigeVariant.nedlastingsinfo,
+                sistLastetNed: new Date().toISOString(),
+              },
+            };
+          }
+          return forrigeVariant;
+        },
+      ),
+    }));
+  };
 
   // -- Scroll til forespurt rapport
   useEffect(() => {
@@ -116,7 +144,10 @@ export default function RapportKort({
         </HStack>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
-        <Innhold rapportMetadata={rapportMetadata} />
+        <Innhold
+          rapportMetadata={rapportMetadata}
+          muterNedlastningsinfo={muterNedlastningsinfo}
+        />
       </ExpansionCard.Content>
     </ExpansionCard>
   );
@@ -124,11 +155,13 @@ export default function RapportKort({
 
 interface InnholdProps {
   rapportMetadata: RapportMetadata;
+  muterNedlastningsinfo: (format: 'pdf' | 'csv', bleLatsetNed: boolean) => void;
 }
 
-function Innhold({ rapportMetadata }: InnholdProps) {
+function Innhold({ rapportMetadata, muterNedlastningsinfo }: InnholdProps) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<'pdf' | 'csv' | null>(null);
+  let nedlastningOk = false;
 
   const hentRapport = async (variant: VariantMedNedlastingsinfo) => {
     setError(null);
@@ -166,10 +199,13 @@ function Innhold({ rapportMetadata }: InnholdProps) {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(blobUrl);
+
+      nedlastningOk = true;
     } catch (e) {
       setError('Det oppstod en teknisk feil ved nedlasting.');
     } finally {
       setIsLoading(null);
+      muterNedlastningsinfo(variant.format, nedlastningOk);
     }
   };
 
