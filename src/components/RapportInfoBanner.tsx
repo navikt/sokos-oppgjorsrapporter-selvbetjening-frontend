@@ -25,7 +25,7 @@ export const RapportInfoBanner = ({ rapportType }: RapportInfoBannerProps) => {
 const rapportTypeTilLenke = (rapportType: RapportType) => {
   switch (rapportType) {
     case 'ref-arbg':
-      return 'https://www.nav.no/arbeidsgiver/oppgjorsrapport.';
+      return 'https://www.nav.no/arbeidsgiver/oppgjorsrapport';
     case 'trekk-kred':
       return 'https://www.nav.no/samarbeidspartner/trekkoppgjorsrapport';
     case 'trekk-hend':
