@@ -4,6 +4,7 @@ import { InfoCard, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { TilbakeTilOrganisasjonsvelger } from '@src/components/TilbakeTilOrganisasjonsvelger.tsx';
+import { RapportInfoBanner } from '@src/components/RapportInfoBanner.tsx';
 
 interface RapportlisteProps {
   rapportliste: RapportMedNedlastingsinfo;
@@ -15,13 +16,13 @@ export default function Rapportliste({ rapportliste }: RapportlisteProps) {
   );
 
   return (
-    <VStack gap="space-32">
+    <VStack gap="space-24">
       <TilbakeTilOrganisasjonsvelger
         type={rapportliste.type}
         orgNavn={rapportliste.orgNavn}
         orgnr={rapportliste.orgnr}
       />
-
+      <RapportInfoBanner rapportType={rapportliste.type} />
       {rapportliste.rapporter.length === 0 && (
         <InfoCard data-color="info">
           <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
