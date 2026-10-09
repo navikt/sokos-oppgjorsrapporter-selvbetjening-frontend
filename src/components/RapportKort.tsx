@@ -10,6 +10,7 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import {
+  type RapportFormat,
   type RapportId,
   type RapportMetadata,
   RapportType,
@@ -56,8 +57,8 @@ export default function RapportKort({
     (variant) => !!variant.nedlastingsinfo?.sistLastetNed,
   );
 
-  const muterNedlastningsinfo = (
-    format: 'pdf' | 'csv',
+  const muterNedlastingsinfo = (
+    format: RapportFormat,
     bleLastetNed: boolean,
   ) => {
     if (!bleLastetNed) return;
@@ -146,7 +147,7 @@ export default function RapportKort({
       <ExpansionCard.Content>
         <Innhold
           rapportMetadata={rapportMetadata}
-          muterNedlastningsinfo={muterNedlastningsinfo}
+          muterNedlastingsinfo={muterNedlastingsinfo}
         />
       </ExpansionCard.Content>
     </ExpansionCard>
@@ -155,13 +156,13 @@ export default function RapportKort({
 
 interface InnholdProps {
   rapportMetadata: RapportMetadata;
-  muterNedlastningsinfo: (format: 'pdf' | 'csv', bleLatsetNed: boolean) => void;
+  muterNedlastingsinfo: (format: RapportFormat, bleLastetNed: boolean) => void;
 }
 
-function Innhold({ rapportMetadata, muterNedlastningsinfo }: InnholdProps) {
+function Innhold({ rapportMetadata, muterNedlastingsinfo }: InnholdProps) {
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<'pdf' | 'csv' | null>(null);
-  let nedlastningOk = false;
+  const [isLoading, setIsLoading] = useState<RapportFormat | null>(null);
+  let nedlastingOk = false;
 
   const hentRapport = async (variant: VariantMedNedlastingsinfo) => {
     setError(null);
@@ -200,12 +201,12 @@ function Innhold({ rapportMetadata, muterNedlastningsinfo }: InnholdProps) {
       a.remove();
       window.URL.revokeObjectURL(blobUrl);
 
-      nedlastningOk = true;
+      nedlastingOk = true;
     } catch (e) {
       setError('Det oppstod en teknisk feil ved nedlasting.');
     } finally {
       setIsLoading(null);
-      muterNedlastningsinfo(variant.format, nedlastningOk);
+      muterNedlastingsinfo(variant.format, nedlastingOk);
     }
   };
 
