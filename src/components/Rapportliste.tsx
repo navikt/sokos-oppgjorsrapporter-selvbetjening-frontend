@@ -34,7 +34,7 @@ export default function Rapportliste({ rapportliste }: RapportlisteProps) {
 
       {rapportliste.rapporter.map((rapport) => (
         <RapportKort
-          rapportMetadata={rapport}
+          initiellRapportMetadata={rapport}
           rapportType={rapportliste.type}
           valgtRapport={valgtRapport}
           oppdaterValgtRapport={setValgtRapport}
