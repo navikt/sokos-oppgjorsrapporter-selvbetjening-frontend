@@ -37,7 +37,7 @@ api.post('/api/ekstern/v1', async (c) => {
   });
 });
 
-api.get('/api/rapport/v1/:rapportId/utvidet', (c) => {
+api.get('/api/ekstern/v1/:rapportId', (c) => {
   return c.json({
     ...example,
     forespurtRapportId: Number(c.req.param('rapportId')),
