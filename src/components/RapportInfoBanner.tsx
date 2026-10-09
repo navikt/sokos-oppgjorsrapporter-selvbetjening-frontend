@@ -8,7 +8,7 @@ interface RapportInfoBannerProps {
 
 export const RapportInfoBanner = ({ rapportType }: RapportInfoBannerProps) => {
   const rapportNavn = rapportKortform(rapportType).toLocaleLowerCase();
-  const lenke = rapportTypeTilLenke(rapportType);
+  const lenke = infoLenke[rapportType];
 
   return (
     <BodyLong size="small">
@@ -22,13 +22,8 @@ export const RapportInfoBanner = ({ rapportType }: RapportInfoBannerProps) => {
   );
 };
 
-const rapportTypeTilLenke = (rapportType: RapportType) => {
-  switch (rapportType) {
-    case 'ref-arbg':
-      return 'https://www.nav.no/arbeidsgiver/oppgjorsrapport';
-    case 'trekk-kred':
-      return 'https://www.nav.no/samarbeidspartner/trekkoppgjorsrapport';
-    case 'trekk-hend':
-      return 'https://www.nav.no/samarbeidspartner/manglende-trekk';
-  }
+const infoLenke: { [T in RapportType]: string } = {
+  'ref-arbg': 'https://www.nav.no/arbeidsgiver/oppgjorsrapport',
+  'trekk-kred': 'https://www.nav.no/samarbeidspartner/trekkoppgjorsrapport',
+  'trekk-hend': 'https://www.nav.no/samarbeidspartner/manglende-trekk',
 };
