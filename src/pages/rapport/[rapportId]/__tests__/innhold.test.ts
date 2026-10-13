@@ -35,7 +35,6 @@ const createMockContext = (overrides: {
 
 describe('GET /rapport/[rapportId]/innhold', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     vi.mocked(exchangeCitizenToken).mockResolvedValue('mocked-tokenx-token');
   });
 

@@ -1,5 +1,5 @@
 ---
-import { fetchDecoratorReact } from '@navikt/nav-dekoratoren-moduler/ssr';
+import { fetchDecoratorHtml } from '@navikt/nav-dekoratoren-moduler/ssr';
 import { getEnvironment } from '../utils/server/environment';
 import { text } from '../language/text';
 import styles from './Layout.module.css';
@@ -44,7 +44,7 @@ const brodSmuler =
     ? [...rotSmulerArbeidsgiver, ...smuler]
     : [...rotSmulerSamarbeidspartner, ...smuler];
 
-const Decorator = await fetchDecoratorReact({
+const Decorator = await fetchDecoratorHtml({
   env: getEnvironment(),
   params: {
     context: rapportType === 'ref-arbg' ? 'arbeidsgiver' : 'samarbeidspartner',
@@ -52,6 +52,13 @@ const Decorator = await fetchDecoratorReact({
     availableLanguages: [],
   },
 });
+
+const {
+  DECORATOR_HEAD_ASSETS,
+  DECORATOR_HEADER,
+  DECORATOR_FOOTER,
+  DECORATOR_SCRIPTS,
+} = Decorator;
 ---
 
 <!doctype html>
@@ -71,10 +78,10 @@ const Decorator = await fetchDecoratorReact({
       rel="stylesheet"
       href="https://cdn.nav.no/aksel/@navikt/ds-css/8.8.0/index.min.css"
     />
-    <Decorator.HeadAssets />
+    <Fragment set:html={DECORATOR_HEAD_ASSETS} />
   </head>
   <body>
-    <Decorator.Header />
+    <Fragment set:html={DECORATOR_HEADER} />
     <main id="maincontent" class={styles.container} role="main" tabindex="-1">
       <VStack gap="space-32">
         <div>
@@ -90,7 +97,7 @@ const Decorator = await fetchDecoratorReact({
         {!error && <slot />}
       </VStack>
     </main>
-    <Decorator.Footer />
-    <Decorator.Scripts />
+    <Fragment set:html={DECORATOR_FOOTER} />
+    <Fragment set:html={DECORATOR_SCRIPTS} />
   </body>
 </html>
