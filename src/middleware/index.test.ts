@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { APIContext } from 'astro';
 import { onRequest } from './index';
 import { getToken, validateToken } from '@navikt/oasis';
@@ -49,10 +49,6 @@ describe('middleware', () => {
       locals: {} as any,
       redirect: mockRedirect,
     }) as unknown as APIContext;
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   it('skal bevare full sti i redirect når token ikke finnes', async () => {
     vi.mocked(getToken).mockReturnValue(null);
