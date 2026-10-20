@@ -31,13 +31,13 @@
     "prettier-plugin-astro": "0.14.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "ts-pattern": "^5.9.2",
+    "ts-pattern": "^5.9.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.14.0",
+    "@axe-core/playwright": "^4.13.0",
     "@hono/node-server": "^2.1.5",
-    "@playwright/test": "^1.64.1",
+    "@playwright/test": "^1.64.0",
     "@types/node": "24.5.2",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
