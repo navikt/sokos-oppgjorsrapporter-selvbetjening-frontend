@@ -39,24 +39,20 @@ const virksomheter = response.data ?? [];
     },
   ]}
 >
-  {
-    virksomheter.length == 0 && (
-      <Heading size="medium" level="2">
-        Du har ikke tilgang til noen virksomheter
-      </Heading>
-    )
-  }
-  {
-    virksomheter.length > 0 && (
-      <>
-        <VirksomhetslisteHeader rapportType={rapportType} client:load />
-        <Virksomhetsliste
-          rapportType={rapportType}
-          virksomheter={virksomheter}
-          client:load
-        />
-        <AdministrerTilganger client:load />
-      </>
-    )
-  }
+  {virksomheter.length == 0 && (
+    <Heading size="medium" level="2">
+      Du har ikke tilgang til noen virksomheter
+    </Heading>
+  )}
+  {virksomheter.length > 0 && (
+    <>
+      <VirksomhetslisteHeader rapportType={rapportType} client:load />
+      <Virksomhetsliste
+        rapportType={rapportType}
+        virksomheter={virksomheter}
+        client:load
+      />
+      <AdministrerTilganger client:load />
+    </>
+  )}
 </Layout>
