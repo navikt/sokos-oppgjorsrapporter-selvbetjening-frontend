@@ -85,15 +85,15 @@ const {
     <main id="maincontent" class={styles.container} role="main" tabindex="-1">
       <VStack gap="space-32">
         <div>
-          <Heading size="large" level="1">{title}</Heading>
+          <Heading size="large" level="1">
+            {title}
+          </Heading>
         </div>
-        {
-          error && (
-            <ErrorSummary heading="Det oppstod en feil">
-              <ErrorSummary.Item>{error}</ErrorSummary.Item>
-            </ErrorSummary>
-          )
-        }
+        {error && (
+          <ErrorSummary heading="Det oppstod en feil">
+            <ErrorSummary.Item>{error}</ErrorSummary.Item>
+          </ErrorSummary>
+        )}
         {!error && <slot />}
       </VStack>
     </main>
