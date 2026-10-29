@@ -6,6 +6,7 @@ test('viser feilmelding ved ugyldig rapportId — og har ingen a11y-feil', async
   baseURL,
 }) => {
   await page.goto(`${baseURL}/rapport/ugyldig-id`);
+  await page.waitForLoadState('networkidle');
   await expect(page.getByText('Det oppstod en feil')).toBeVisible();
 
   const results = await new AxeBuilder({ page }).analyze();
