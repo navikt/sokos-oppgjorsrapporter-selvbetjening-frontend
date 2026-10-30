@@ -1,6 +1,6 @@
 import { BodyLong, Heading, Link, VStack } from '@navikt/ds-react';
 import { text } from '@src/language/text.ts';
-import ArrowLeft from 'node_modules/@navikt/aksel-icons/dist/react/esm/ArrowLeft';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export function TilbakeTilOrganisasjonsvelger(props: {
   type: 'ref-arbg' | 'trekk-kred' | 'trekk-hend';
@@ -10,7 +10,7 @@ export function TilbakeTilOrganisasjonsvelger(props: {
   return (
     <>
       <Link href={`/oppgjorsrapporter/${props.type}`}>
-        <ArrowLeft aria-hidden />
+        <ArrowLeftIcon aria-hidden />
         Tilbake til dine organisjasjoner
       </Link>
       <VStack>
