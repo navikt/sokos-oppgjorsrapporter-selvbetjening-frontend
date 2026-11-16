@@ -42,10 +42,10 @@ spec:
     - "https://www.nav.no/oppgjorsrapporter"
   resources:
     limits:
-      memory: 1024Mi
+      memory: 512Mi
     requests:
       cpu: "50m"
-      memory: 512Mi
+      memory: 256Mi
   env:
     - name: SOKOS_OPPGJORSRAPPORTER_API
       value: http://sokos-oppgjorsrapporter
