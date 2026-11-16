@@ -17,7 +17,7 @@ spec:
       level: Level3
   tokenx:
     enabled: true
-  image: {{ image }}
+  image: { { image } }
   port: 3000
   liveness:
     path: /oppgjorsrapporter/api/internal/isAlive
@@ -28,6 +28,10 @@ spec:
   replicas:
     min: 2
     max: 4
+    scalingStrategy:
+      scaleUpStabilizationWindowSeconds: 30
+      cpu:
+        thresholdPercentage: 75
   accessPolicy:
     outbound:
       rules:
@@ -38,10 +42,10 @@ spec:
     - "https://www.nav.no/oppgjorsrapporter"
   resources:
     limits:
-      memory: 768Mi
+      memory: 1024Mi
     requests:
-      cpu: "65m"
-      memory: 672Mi
+      cpu: "50m"
+      memory: 512Mi
   env:
     - name: SOKOS_OPPGJORSRAPPORTER_API
       value: http://sokos-oppgjorsrapporter
