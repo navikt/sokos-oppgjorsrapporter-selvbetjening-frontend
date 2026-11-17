@@ -28,6 +28,10 @@ spec:
   replicas:
     min: 2
     max: 4
+    scalingStrategy:
+      scaleUpStabilizationWindowSeconds: 30
+      cpu:
+        thresholdPercentage: 75
   accessPolicy:
     outbound:
       rules:
